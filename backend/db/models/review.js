@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Users'
       },
     },
-    review: DataTypes.STRING,
+    review: DataTypes.TEXT(500),
     stars: DataTypes.INTEGER
   }, {
     sequelize,
