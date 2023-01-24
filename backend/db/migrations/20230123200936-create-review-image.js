@@ -16,22 +16,25 @@ module.exports = {
       },
       reviewId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Reviews',
         },
+        onDelete: 'CASCADE',
       },
       url: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = "ReviewImages";

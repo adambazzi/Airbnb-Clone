@@ -16,31 +16,37 @@ module.exports = {
       },
       spotId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Spots',
         },
+        onDelete: 'CASCADE',
       },
       userId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: 'Users'
-        }
+          model: 'Users',
+        },
+        onDelete: 'CASCADE',
       },
       startDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       endDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = "Bookings";
