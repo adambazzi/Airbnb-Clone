@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Review',
+    scopes: {
+      omitTimes: {
+        attributes: { exclude: ["createdAt", "updatedAt"] }
+      },
+    }
   });
   return Review;
 };
