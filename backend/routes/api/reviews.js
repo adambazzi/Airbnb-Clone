@@ -1,11 +1,34 @@
 const express = require('express')
 const router = express.Router();
 const Sequelize = require("sequelize")
-const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
+const { requireAuth } = require('../../utils/auth');
 const { User, Review, ReviewImage, Spot, SpotImage } = require('../../db/models');
 
+//Verify authorization
+const checkReviewAuthorization = async (req,res,next) => {
+    const review = await Review.findByPk(req.params.reviewId)
+    const reviewJSON = review.toJSON()
+    if (reviewJSON.userId !== req.user.id) {
+        const error = new Error("Forbidden");
+        error.status = 403;
+        return next(error);
+    }
+    next()
+}
 
-router.put('/:reviewId', requireAuth, async (req,res,next) => {
+//Check if review exists
+const checkReview = async (req,res,next) => {
+    const review = await Review.findByPk(req.params.reviewId)
+    if(!review) {
+        const error = new Error("Review couldn't be found");
+        error.status = 404;
+        return next(error)
+    }
+    next()
+}
+
+//Edit a Review
+router.put('/:reviewId', requireAuth, checkReview, checkReviewAuthorization, async (req,res,next) => {
     const { review, stars } = req.body;
     const errors = {};
 
@@ -19,13 +42,7 @@ router.put('/:reviewId', requireAuth, async (req,res,next) => {
         return next(error)
     }
 
-    //Verifies if review exists
     const spotReview = await Review.findByPk(req.params.reviewId);
-    if (!spotReview) {
-        const error = new Error("Validation error");
-        error.status = 404;
-        return next("Review couldn't be found")
-    }
 
     //Builds the review and saves it
     const newReview = spotReview.set({
@@ -39,15 +56,9 @@ router.put('/:reviewId', requireAuth, async (req,res,next) => {
 })
 
 //Add an Image to a Review based on the Review's id
-router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
+router.post('/:reviewId/images', requireAuth, checkReview, checkReviewAuthorization, async (req,res,next) => {
     const reviewId = req.params.reviewId;
     const review = await Review.findByPk(reviewId);
-    //verify if the review exists
-    if (!review) {
-        const error = new Error("Review couldn't be found");
-        error.status = 404;
-        return next(error);
-    }
 
     const reviewJSON = review.toJSON();
     //verify number of images
@@ -82,7 +93,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
             userId: req.user.id
         }
     })
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.user.id, { attributes: ["id", "firstName", "lastName"]});
     const userJSON = user.toJSON();
 
     const reviews2 = []
@@ -90,8 +101,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
         const reviewJSON = review.toJSON()
         reviewJSON.User = userJSON
 
-        const spot = await Spot.scope("omitTimes").findByPk(reviewJSON.spotId)
-        reviewJSON.Spot = spot;
+        const spot = await Spot.scope('omitTimes').findByPk(reviewJSON.spotId)
 
         const previewImage = await SpotImage.findOne({
             where: {
@@ -99,30 +109,26 @@ router.get('/current', requireAuth, async (req,res,next) => {
                 preview: true
             }
         })
-        reviewJSON.previewImage = previewImage.toJSON().url
+        const spotJSON = spot.toJSON()
+        spotJSON.previewImage = previewImage.toJSON().url
+        reviewJSON.Spot = spotJSON;
 
         const images = await ReviewImage.findAll({
             where: {
                 reviewId: reviewJSON.id,
             },
+            attributes: ["id", "url"]
         });
         reviewJSON.ReviewImages = images;
         reviews2.push(reviewJSON);
     }
-    res.status(200).json(reviews2)
+    res.status(200).json({ Reviews: reviews2 })
 
 })
 
 //Delete a Review
-router.delete('/:reviewId', requireAuth, async (req,res,next) => {
+router.delete('/:reviewId', requireAuth, checkReview, checkReviewAuthorization, async (req,res,next) => {
     const spotReview = await Review.findByPk(req.params.reviewId);
-
-    //verifies if the review was found
-    if (!spotReview) {
-        const error = new Error("Review couldn't be found");
-        error.status = 404;
-        return next(error);
-    }
 
     //deletes the review
     await spotReview.destroy();
