@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       //one to many with review images
-      Review.hasMany(models.ReviewImage, { foreignKey: 'reviewId' });
+      Review.hasMany(models.ReviewImage, { foreignKey: 'reviewId', onDelete: "CASCADE", hooks: true });
 
       //one to many with users
       Review.belongsTo(models.User, { foreignKey: 'userId' });
