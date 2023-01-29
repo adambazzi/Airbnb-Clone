@@ -347,6 +347,25 @@ router.get('/:spotId', checkSpot, async (req,res,next) => {
         }
     })
     spotJSON = spot.toJSON()
+
+    //Number of reviews
+    spotJSON.numReviews = await Review.count({
+        where: {
+            spotId: spotJSON.id
+        }
+    })
+
+    //Average review rating
+    let reviews = await Review.findAll({
+        where: {
+            spotId: spotJSON.id,
+        },
+        attributes: [[Sequelize.fn('AVG',Sequelize.col('stars')),'avgRating']]
+    })
+    reviews = reviews[0].toJSON();
+    spotJSON.avgRating = reviews.avgRating || 0;
+
+    //Owner information
     const owner = await User.findByPk(spotJSON.ownerId, {
         attributes: ['id', 'firstName', 'lastName']
     });
