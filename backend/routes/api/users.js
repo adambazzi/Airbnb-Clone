@@ -68,7 +68,7 @@ router.post(
         ...user.toJSON(),
         token: token
       });
-    }
+    },
   '/',
   validateSignup,
   async (req, res) => {
