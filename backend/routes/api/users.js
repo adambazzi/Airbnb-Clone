@@ -34,41 +34,6 @@ const validateSignup = [
 ];
 
 router.post(
-    '/',
-    validateSignup,
-    async (req, res, next) => {
-      const { email, password, username, firstName, lastName } = req.body;
-
-      const errors = {}
-      const emailCheck = await User.findAll({
-        where: {
-          email: email
-        }
-      })
-      const usernameCheck = await User.findAll({
-        where: {
-          username: username
-        }
-      })
-      //verifies if username or email exists
-      if (emailCheck.length) errors.email = "User with that email already exists"
-      if (usernameCheck.length) errors.username = "User with that username already exists"
-      if (Object.keys(errors).length) {
-        const error = new Error("User already exists");
-        error.status = 403;
-        error.errors = errors
-        return next(error)
-      }
-
-      const user = await User.signup({ email, username, password, firstName, lastName });
-
-      const token = await setTokenCookie(res, user);
-
-      return res.json({
-        ...user.toJSON(),
-        token: token
-      });
-    },
   '/',
   validateSignup,
   async (req, res) => {
