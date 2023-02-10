@@ -78,8 +78,6 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, async (req,res,next) =>
     })
     await newBooking.save()
 
-    //verifys booking is in the database
-    console.log(newBooking.toJSON())
     const verifyBooking = await Booking.findByPk(newBooking.toJSON().id)
     //sends the response body
     res.status(200).json(verifyBooking)
@@ -326,7 +324,6 @@ router.get('/current', requireAuth, async (req,res,next) => {
                 preview: true
             },
         });
-        console.log(image)
         spotJSON.previewImage = image.toJSON().url
         spotsV1.push(spotJSON);
 
