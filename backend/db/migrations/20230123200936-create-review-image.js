@@ -5,7 +5,7 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
-options.tableName = "Users";
+options.tableName = "ReviewImages";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -14,29 +14,25 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      reviewId: {
         type: Sequelize.INTEGER,
-      },
-      username: {
-        type: Sequelize.STRING(30),
         allowNull: false,
-        unique: true,
+        references: {
+          model: 'Reviews',
+        },
+        onDelete: 'CASCADE',
       },
-      email: {
-        type: Sequelize.STRING(256),
-        allowNull: false,
-        unique: true,
-      },
-      hashedPassword: {
-        type: Sequelize.STRING.BINARY,
+      url: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }

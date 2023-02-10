@@ -5,7 +5,7 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
-options.tableName = "Users";
+options.tableName = "Spots";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -14,29 +14,57 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      ownerId: {
         type: Sequelize.INTEGER,
-      },
-      username: {
-        type: Sequelize.STRING(30),
         allowNull: false,
-        unique: true,
+        reference: {
+          model: 'Owners'
+        },
+        onDelete: 'CASCADE',
       },
-      email: {
-        type: Sequelize.STRING(256),
+      address: {
+        type: Sequelize.STRING(100),
         allowNull: false,
-        unique: true,
       },
-      hashedPassword: {
-        type: Sequelize.STRING.BINARY,
+      city: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
+      state: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
+      country: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
+      lat: {
+        type: Sequelize.DECIMAL(13,8),
+        allowNull: false,
+      },
+      lng: {
+        type: Sequelize.DECIMAL(13,8),
+        allowNull: false,
+      },
+      name: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.TEXT(500),
+        allowNull: false,
+      },
+      price: {
+        type: Sequelize.DECIMAL(12,2),
         allowNull: false,
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }
