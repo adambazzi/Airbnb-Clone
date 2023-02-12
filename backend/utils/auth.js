@@ -4,7 +4,6 @@ const { User } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
-// Sends a JWT Cookie
 const setTokenCookie = (res, user) => {
     // Create the token.
     const token = jwt.sign(
@@ -24,30 +23,30 @@ const setTokenCookie = (res, user) => {
     });
 
     return token;
-  };
+};
 
 const restoreUser = (req, res, next) => {
-// token parsed from cookies
-const { token } = req.cookies;
-req.user = null;
+    // token parsed from cookies
+    const { token } = req.cookies;
+    req.user = null;
 
-return jwt.verify(token, secret, null, async (err, jwtPayload) => {
-    if (err) {
-    return next();
-    }
+    return jwt.verify(token, secret, null, async (err, jwtPayload) => {
+      if (err) {
+        return next();
+      }
 
-    try {
-    const { id } = jwtPayload.data;
-    req.user = await User.scope('currentUser').findByPk(id);
-    } catch (e) {
-    res.clearCookie('token');
-    return next();
-    }
+      try {
+        const { id } = jwtPayload.data;
+        req.user = await User.scope('currentUser').findByPk(id);
+      } catch (e) {
+        res.clearCookie('token');
+        return next();
+      }
 
-    if (!req.user) res.clearCookie('token');
+      if (!req.user) res.clearCookie('token');
 
-    return next();
-});
+      return next();
+    });
 };
 
 const requireAuth = function (req, _res, next) {
@@ -59,7 +58,6 @@ const requireAuth = function (req, _res, next) {
     err.status = 401;
     return next(err);
 }
-
 
 
 module.exports = { setTokenCookie, restoreUser, requireAuth };

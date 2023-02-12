@@ -373,7 +373,7 @@ router.get('/:spotId', checkSpot, async (req,res,next) => {
 })
 
 //Get all spots
-router.get('/', requireAuth, async (req,res,next) => {
+router.get('/', async (req,res,next) => {
     const spots = await Spot.findAll();
     const spotsV1 = [];
 

@@ -1,4 +1,4 @@
-import { csrfFetch } from "./csrf";
+
 const LOAD_SPOTS = 'spots/LOAD_SPOTS'
 
 const loadSpots = payload => ({
@@ -7,7 +7,7 @@ const loadSpots = payload => ({
 });
 
 export const getSpots = () => async dispatch => {
-  const response = await csrfFetch(`/api/spots`);
+  const response = await fetch('/api/spots');
   if (response.ok) {
     const payload = await response.json();
     dispatch(loadSpots(payload));

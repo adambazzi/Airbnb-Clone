@@ -4,10 +4,10 @@ import { getSpots } from '../../store/Spots'
 import SpotTile from './SpotInfo'
 import './index.css'
 
-const Spots = () => {
+const SpotInfo = () => {
   const dispatch = useDispatch();
 
-  const spots = useSelector(state => state.spots.allSpots);
+  const spots = useSelector(state => state.spots.singleSpot);
 
   useEffect(() => {dispatch(getSpots())}, [dispatch]);
 
@@ -24,4 +24,4 @@ const Spots = () => {
   )
 };
 
-export default Spots;
+export default SpotInfo;
