@@ -3,7 +3,7 @@
     justify-content: center;
     flex-direction: column;
     width: 80%;
-    margin: 0 10%;
+    margin: 0px 10%;
 }
 #spot-tiles {
     display: grid;
@@ -13,12 +13,12 @@
     width: 100%;
 }
 
-@media screen and (min-width: 1300px){
+@media screen and (min-width: 1570px){
     #spot-tiles {
         grid-template-columns: repeat(4, 1fr);
     }
 }
-@media screen and (max-width: 1300px){
+@media screen and (max-width: 1570px){
     #spot-tiles {
         grid-template-columns: repeat(3, 1fr);
     }

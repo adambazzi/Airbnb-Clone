@@ -31,11 +31,12 @@ function ProfileButton({ user }) {
     dispatch(sessionActions.logout());
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "profile-dropdown dropdown-menu-display" + (showMenu ? "" : " hidden");
 
   return (
     <>
-      <button onClick={openMenu}>
+      <button onClick={openMenu} id='profile-button'>
+        <i class="fa-sharp fa-solid fa-bars"></i>
         <i className="fas fa-user-circle" />
       </button>
       <ul className={ulClassName} ref={ulRef}>

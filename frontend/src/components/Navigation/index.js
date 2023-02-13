@@ -33,9 +33,12 @@ function Navigation({ isLoaded }){
   }
 
   return (
-    <ul>
+    <ul className='nav-bar'>
       <li>
-        <NavLink exact to="/">Home</NavLink>
+        <NavLink exact to="/" id='home-path'>
+          <img src="https://d3ui957tjb5bqd.cloudfront.net/uploads/2015/09/airbnb-2.jpg" alt='logo' id='nav-bar-logo'></img>
+          <div id='breezebnb-title'>Breezebnb</div>
+        </NavLink>
       </li>
       {isLoaded && sessionLinks}
     </ul>

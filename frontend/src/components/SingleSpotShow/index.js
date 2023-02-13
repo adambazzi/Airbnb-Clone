@@ -10,8 +10,6 @@ const SingleSpotShow = () => {
   const { spotId } = useParams();
 
   const spot = useSelector(state => state.spots.singleSpot);
-  console.log(spot)
-
 
   useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch]);
 

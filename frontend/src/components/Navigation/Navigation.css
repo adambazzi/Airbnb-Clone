@@ -1,3 +1,69 @@
 .hidden {
-    display: none
+    display: none;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    list-style-type: none;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-bar a {
+    text-decoration: none;
+}
+.nav-bar {
+    position: sticky;
+    top: 0px;
+    background-color: white;
+    border-bottom: rgb(199, 187, 187) 2px solid;
+    margin-bottom: 30px;
+}
+
+#breezebnb-title {
+    position: relative;
+    right: 10px;
+    color: #FF5A5F;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: serif;
+    bottom: 0px;
+}
+
+#nav-bar-logo {
+    height: 60px;
+    rotate: 180deg;
+}
+
+
+#home-path {
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    align-items: center;
+}
+
+#home-path {
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    top: 0px;
+}
+
+.dropdown-menu-display {
+    position: absolute;
+    background-color: white;
+    right: 20px;
+    list-style: none;
+}
+
+#profile-button {
+    margin-right: 20px;
+    width: 60px;
+    height: 27px;
+    border-radius: 8px;
 }
