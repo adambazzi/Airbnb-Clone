@@ -1,0 +1,36 @@
+#spot-gallery {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 10%;
+}
+#spot-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5%;
+    grid-auto-rows: minmax(100px, auto);
+    width: 100%;
+}
+
+@media screen and (min-width: 1300px){
+    #spot-tiles {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+@media screen and (max-width: 1300px){
+    #spot-tiles {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 1070px){
+    #spot-tiles {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (max-width: 870px){
+    #spot-tiles {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

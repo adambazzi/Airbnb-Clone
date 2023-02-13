@@ -1,0 +1,74 @@
+#single-spot {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 10%;
+}
+#description-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    border-bottom: 2px solid black;
+    margin-top: 10px;
+}
+
+#name-description-container {
+    display: flex;
+    flex-direction: column;
+    width: 66%;
+}
+
+#reserve-container {
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    width: 25%;
+    height: 100px;
+    align-items: stretch;
+    background-color: #fff;
+    border: black 2px solid;
+    border-radius: 8px;
+    font-family: Helvetica;
+    margin: 20px 20px;
+}
+
+#spot-description {
+    margin: 10px 0 0 0;
+}
+
+#reserve-container-price {
+    font-size: 15px;
+}
+
+#reserve-container-child1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.reserve-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 15px
+}
+
+.reserve-button {
+    width: 80%;
+    height: 30px;
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+    background-color: #FF5A5F;
+    box-shadow: 2px 2px 0px black;
+    color: white;
+}
+
+#hosted-by {
+    font-size: 20px;
+    padding: 4px 0;
+}

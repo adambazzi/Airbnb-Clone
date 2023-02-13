@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSpots } from '../../store/Spots'
-import SpotTile from './SpotInfo'
+import SpotTile from './SpotTile'
 import './index.css'
 
-const SpotInfo = () => {
+const Spots = () => {
   const dispatch = useDispatch();
 
-  const spots = useSelector(state => state.spots.singleSpot);
+  const spots = useSelector(state => state.spots.allSpots);
 
   useEffect(() => {dispatch(getSpots())}, [dispatch]);
 
@@ -24,4 +24,4 @@ const SpotInfo = () => {
   )
 };
 
-export default SpotInfo;
+export default Spots;
