@@ -1,9 +1,6 @@
 
 import { Link } from 'react-router-dom'
 import './SpotTile.css'
-const price1 = (Math.round(spot.price * 100) / 100).toString()
-let price2 = price1.split('.').length === 1 ? price1 + '.00' : price1;
-
 
 const SpotTile = ({ spot }) => {
     const price1 = (Math.round(spot.price * 100) / 100).toString()
