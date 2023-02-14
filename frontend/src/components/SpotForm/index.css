@@ -1,0 +1,104 @@
+label {
+    display: flex;
+    flex-direction: column;
+}
+#spot-form-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+#spot-form-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 500px;
+    margin: 0px;
+
+}
+#spot-form-area-2 {
+    display: flex;
+    flex-direction: row;
+}
+
+#spot-form-area-3 {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 30px;
+    border-bottom: solid black 2px;
+}
+
+.comma {
+    display: flex;
+    align-items: flex-end;
+    width: 2%;
+}
+
+input {
+    background-color: rgb(212, 221, 238);
+}
+textarea {
+    width: 100%;
+    height: 120px;
+    background-color: rgb(212, 221, 238);
+}
+
+#city {
+    width: 60%;
+}
+#state {
+    width: 38%;
+}
+
+#Latitude {
+    width: 49%;
+}
+
+#Longitude {
+    width: 49%;
+}
+
+#description, #title, #price, #photos {
+    border-bottom: solid black 2px;
+    padding-bottom: 30px;
+}
+
+#photos {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+}
+
+#submit-container {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#button {
+    margin-top: 20px;
+    background-color: #FF5A5F;
+    color: white;
+    border-radius: 5px;
+    width: 20%;
+    height: 25px;
+    font-size: 12px;
+    background-color: #FF5A5F;
+    box-shadow: 2px 2px 0px black;
+    color: white;
+}
+
+h2, h3 {
+    margin-bottom: 6px;
+    margin-top: 3px;
+    padding: 0px;
+}
+
+p {
+    font-size: 17px;
+}

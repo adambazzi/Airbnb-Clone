@@ -6,7 +6,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import Spots from "./components/SpotsShow"
 import SingleSpotShow from "./components/SingleSpotShow";
-import CreateNewSpotForm from "./components/CreateNewSpotForm";
+import SpotForm from "./components/SpotForm";
 
 
 function App() {
@@ -21,17 +21,17 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route path="/signup">
-            <SignupFormModal />
-          </Route>
           <Route exact path ="/">
             <Spots />
           </Route>
+          <Route exact path="/signup">
+            <SignupFormModal />
+          </Route>
+          <Route exact path ="/spots/new">
+            <SpotForm />
+          </Route>
           <Route exact path ="/spots/:spotId">
             <SingleSpotShow />
-          </Route>
-          <Route exact path ="/spots">
-            <CreateNewSpotForm />
           </Route>
         </Switch>
       )}
