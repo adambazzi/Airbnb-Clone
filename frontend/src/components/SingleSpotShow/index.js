@@ -5,6 +5,7 @@ import { getSpotReviews } from '../../store/Reviews';
 import { useParams } from 'react-router-dom';
 import SpotImages from './SpotImages';
 import './index.css'
+import DisplayReviews from './DisplayReviews';
 
 
 const SingleSpotShow = () => {
@@ -22,7 +23,6 @@ const SingleSpotShow = () => {
 
   const avgRating2 = (Math.round(spot.avgRating * 10) / 10).toString()
   const avgRating3 = avgRating2.split('.').length === 1 ? avgRating2 + '.0' : avgRating2;
-
 
   const price1 = (Math.round(spot.price * 100) / 100).toString()
   let price2 = price1.split('.').length === 1 ? price1 + '.00' : price1;
@@ -43,7 +43,7 @@ const SingleSpotShow = () => {
               <span id="reserve-container-price">${price2}</span><span id="reserve-container-child1-night"> night</span>
             </div>
             <div>
-              <i className="fa-regular fa-star"></i><span>{avgRating3}</span>
+              <i className="fa-regular fa-star"></i><span>{avgRating3}</span><span>{spot.numReviews}</span>
             </div>
           </div>
           <div className='reserve-button-container'>
@@ -61,7 +61,9 @@ const SingleSpotShow = () => {
                 Post Your Review
             </button>
         </div>
-        {reviews.length ? Object.values(reviews).map(review => (<div>{review.review}</div>)) : (<div>Be the first to post a review!</div>)}
+        <ul className='single-spot-display-reviews-list'>
+          <DisplayReviews spotId={ spotId }/>
+        </ul>
       </div>
     </section>
   )
