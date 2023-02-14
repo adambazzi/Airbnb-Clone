@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleSpot } from '../../store/Spots'
-import { getSpotReviews } from '../../store/reviews';
+import { getSpotReviews } from '../../store/Reviews';
 import { useParams } from 'react-router-dom';
 import SpotImages from './SpotImages';
 import './index.css'
