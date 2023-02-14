@@ -9,9 +9,9 @@ const SpotTile = ({ spot }) => {
             <div className='spot-tile-preview-information'>
                 <div className='spot-tile-city-state-stars'>
                     <div className='spot-tile-city-state'>{spot.city}, {spot.state}</div>
-                    <div className="spot-tile-stars"><i className="fa-regular fa-star"></i>{spot.avgRating.toFixed(1)}</div>
+                    <div className="spot-tile-stars"><i className="fa-regular fa-star"></i>{spot.avgRating}</div>
                 </div>
-                <div className="spot-tile-price">${spot.price.toFixed(2)} night</div>
+                <div className="spot-tile-price">${spot.price} night</div>
             </div>
         </Link>
     )

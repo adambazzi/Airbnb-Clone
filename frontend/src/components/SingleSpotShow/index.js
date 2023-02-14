@@ -32,10 +32,10 @@ const SingleSpotShow = () => {
         <div id="reserve-container">
           <div id="reserve-container-child1">
             <div>
-              <span id="reserve-container-price">${spot.price.toFixed(2)}</span><span id="reserve-container-child1-night"> night</span>
+              <span id="reserve-container-price">${spot.price}</span><span id="reserve-container-child1-night"> night</span>
             </div>
             <div>
-              <i className="fa-regular fa-star"></i><span>{spot.avgRating.toFixed(1)}</span><span>{spot.numReviews.toFixed(0)}</span>
+              <i className="fa-regular fa-star"></i><span>{spot.avgRating}</span><span>{spot.numReviews}</span>
             </div>
           </div>
           <div className='reserve-button-container'>
