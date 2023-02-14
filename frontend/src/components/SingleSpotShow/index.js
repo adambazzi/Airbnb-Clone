@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import SpotImages from './SpotImages';
 import './index.css'
 
+
 const SingleSpotShow = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
@@ -18,6 +19,13 @@ const SingleSpotShow = () => {
   useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch]);
 
   if (!spot || !spot.Owner || !reviews) return null;
+
+  const avgRating2 = (Math.round(spot.avgRating * 10) / 10).toString()
+  const avgRating3 = avgRating2.split('.').length === 1 ? avgRating2 + '.0' : avgRating2;
+
+
+  const price1 = (Math.round(spot.price * 100) / 100).toString()
+  let price2 = price1.split('.').length === 1 ? price1 + '.00' : price1;
 
   return (
     <section id='single-spot'>
@@ -32,10 +40,10 @@ const SingleSpotShow = () => {
         <div id="reserve-container">
           <div id="reserve-container-child1">
             <div>
-              <span id="reserve-container-price">${spot.price}</span><span id="reserve-container-child1-night"> night</span>
+              <span id="reserve-container-price">${price2}</span><span id="reserve-container-child1-night"> night</span>
             </div>
             <div>
-              <i className="fa-regular fa-star"></i><span>{spot.avgRating}</span><span>{spot.numReviews}</span>
+              <i className="fa-regular fa-star"></i><span>{avgRating3}</span>
             </div>
           </div>
           <div className='reserve-button-container'>
