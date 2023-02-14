@@ -1,11 +1,13 @@
 
 #preview-image {
+    object-fit: cover;
     width: 100%;
     height: 412px;
     overflow: hidden;
   }
 
 .secondary-image {
+    object-fit: cover;
     width: 100%;
     height: 205px;
     overflow: hidden;

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleSpot } from '../../store/Spots'
+import { getSpotReviews } from '../../store/reviews';
 import { useParams } from 'react-router-dom';
 import SpotImages from './SpotImages';
 import './index.css'
@@ -10,10 +11,13 @@ const SingleSpotShow = () => {
   const { spotId } = useParams();
 
   const spot = useSelector(state => state.spots.singleSpot);
+  const reviews = useSelector(state => state.reviews.currentSpotReviews);
+  console.log(reviews)
 
   useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch]);
+  useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch]);
 
-  if (!spot || !spot.Owner) return null;
+  if (!spot || !spot.Owner || !reviews) return null;
 
   return (
     <section id='single-spot'>
@@ -49,7 +53,7 @@ const SingleSpotShow = () => {
                 Post Your Review
             </button>
         </div>
-        <div>Be the first to post a review!</div>
+        {reviews.length ? Object.values(reviews).map(review => (<div>{review.review}</div>)) : (<div>Be the first to post a review!</div>)}
       </div>
     </section>
   )
