@@ -7,25 +7,25 @@ const DisplayReviews = ({ spotId }) => {
     const dispatch = useDispatch();
 
     const reviews = useSelector(state => state.reviews.currentSpotReviews);
-    const user = useSelector(state => state.session.user)
+    const user = useSelector(state => state.session.user);
 
     useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch]);
 
     if (!reviews || !user) return null;
 
+    const reviewsArray = Object.values(reviews)
 
     const dateFormat = (date) => {
         const dateArray = date.split('-');
-        console.log(dateArray)
         return (dateArray[0] + '-' + dateArray[1] + '-' + dateArray[2].slice(0,2));
     }
 
     return (
 
         <>
-            {reviews.length ?
-            reviews.map(review =>
-                <li>
+            {reviewsArray.length ?
+            reviewsArray.map(review =>
+                <li key={review.id}>
                     <h4>{user.username}</h4>
                     <div>{dateFormat(review.createdAt)}</div>
                     <div>{review.review}</div>

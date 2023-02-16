@@ -324,7 +324,9 @@ router.get('/current', requireAuth, async (req,res,next) => {
                 preview: true
             },
         });
-        spotJSON.previewImage = image.toJSON().url
+        if(image) {
+            spotJSON.previewImage = image.toJSON().url
+        }
         spotsV1.push(spotJSON);
 
     }

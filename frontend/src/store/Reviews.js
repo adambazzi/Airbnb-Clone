@@ -1,11 +1,17 @@
 import { csrfFetch } from "./csrf";
 
 const LOAD_REVIEWS = 'reviews/LOAD_REVIEWS'
+const ADD_REVIEW = 'reviews/ADD_REVIEW'
 
 const loadReviews = payload => ({
     type: LOAD_REVIEWS,
     payload
   });
+
+const addReview = payload => ({
+  type: ADD_REVIEW,
+  payload
+});
 
 export const getSpotReviews = (spotId) => async dispatch => {
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
@@ -15,19 +21,52 @@ export const getSpotReviews = (spotId) => async dispatch => {
     }
   };
 
+export const createReview = (data) => async dispatch => {
+  const reviewResponse = await csrfFetch(`/api/spots/${data.spotId}/reviews`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (reviewResponse.ok) {
+    const reviewPayload = await reviewResponse.json();
+    dispatch(addReview(reviewPayload))
+  }
+}
+
 
 const initialState = {
-    currentSpotReviews: []
+    currentSpotReviews: {}
 }
 
 const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_REVIEWS:
-        const currentSpotReviews = [ ...action.payload.Reviews ];
-        return {
+      const currentSpotReviews = {};
+      action.payload.Reviews.forEach(review => {currentSpotReviews[review.id] = review})
+      return {
+        ...state,
+        currentSpotReviews
+      }
+    case ADD_REVIEW:
+      // if (!state.currentSpotReviews[action.payload.id]) {
+        const currentSpotReviews2 = { ...state.currentSpotReviews }
+        currentSpotReviews2[action.payload.id] = { ...action.payload }
+        const newState = {
           ...state,
-          currentSpotReviews
-        }
+          currentSpotReviews: currentSpotReviews2
+        };
+        return newState;
+      // }
+      // return {
+      //   ...state.currentSpotReviews,
+      //   [action.payload.id]: {
+      //     ...state[action.payload.id],
+      //     ...action.payload
+      //   }
+      // }
     default:
       return state;
   }

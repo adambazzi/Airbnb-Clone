@@ -3,7 +3,9 @@ import { csrfFetch } from "./csrf";
 const LOAD_SPOTS = 'spots/LOAD_SPOTS'
 const LOAD_SPOT = 'spots/LOAD_SPOT'
 const ADD_SPOT = 'spots/ADD_SPOT'
+const LOAD_CURRENT_USER_SPOTS = 'spot/GET_CURRENT_USER_SPOTS'
 
+// action creators
 const loadSpots = payload => ({
   type: LOAD_SPOTS,
   payload
@@ -18,6 +20,13 @@ const addSpot = payload => ({
   payload
 })
 
+const loadCurrentUserSpots = payload => ({
+  type: LOAD_CURRENT_USER_SPOTS,
+  payload
+})
+
+
+//thunk functions
 export const getSpots = () => async dispatch => {
   const response = await csrfFetch('/api/spots');
   if (response.ok) {
@@ -48,9 +57,7 @@ export const createSpot = data => async dispatch => {
   if (spotResponse.ok) {
     spotPayload = await spotResponse.json()
   }
-  console.log('spotPayload',spotPayload)
   for (let image of Object.values(data.images)) {
-    console.log('image',image)
     image.spotId = spotPayload.id
 
     let imageResponse
@@ -77,17 +84,40 @@ export const createSpot = data => async dispatch => {
 
 };
 
+export const getCurrentUserSpots = spotId => async dispatch => {
+  const response = await csrfFetch('/api/spots/current');
+  if (response.ok) {
+    const payload = await response.json();
+    dispatch(loadCurrentUserSpots(payload))
+  }
+}
+
+export const deleteSpot = spotId => async dispatch => {
+    const response = csrfFetch(`/api/spots/${spotId}`, {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if(response.ok) {
+      dispatch(loadSpots())
+    }
+
+}
+
 const initialState = {
   allSpots: {},
   singleSpot: {},
-  newSpotImages: {}
+  newSpotImages: {},
+  currentUserSpots: {}
 };
 
 
 const spotsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_SPOTS:
-      const allSpots = { ...action.payload.Spots };
+      const allSpots = {};
+      action.payload.Spots.forEach(spot => (allSpots[spot.id] = spot));
       return {
         ...state,
         allSpots
@@ -95,25 +125,24 @@ const spotsReducer = (state = initialState, action) => {
     case LOAD_SPOT:
       return {
         ...state,
-        singleSpot: action.payload
+        singleSpot: { ...action.payload }
       };
     case ADD_SPOT:
-      if (!state[action.payload.id]) {
+      if (!state.allSpots[action.payload.id]) {
+        const allSpots = { ...state.allSpots }
+        allSpots[action.payload.id] = { ...action.payload }
         const newState = {
           ...state,
-          [action.payload.id]: action.payload
+          allSpots
         };
-        const allSpots = newState.list.map(id => newState[id]);
-        allSpots.push(action.payload);
-        newState.allSpots = allSpots;
         return newState;
       }
+    case LOAD_CURRENT_USER_SPOTS:
+      const currentUserSpots = {};
+      action.payload.Spots.forEach(spot => (currentUserSpots[spot.id] = spot));
       return {
-        ...state.allSpots,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          ...action.payload
-        }
+        ...state,
+        currentUserSpots
       }
     default:
       return state;

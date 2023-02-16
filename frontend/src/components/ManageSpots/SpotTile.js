@@ -16,6 +16,7 @@ const SpotTile = ({ spot }) => {
                     <div className="spot-tile-stars"><i className="fa-regular fa-star"></i>{avgRating}</div>
                 </div>
                 <div className="spot-tile-price">${price} night</div>
+                <button>Delete</button>
             </div>
         </Link>
     )

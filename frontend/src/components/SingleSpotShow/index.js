@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import SpotImages from './SpotImages';
 import './index.css'
 import DisplayReviews from './DisplayReviews';
+import CreateReviewModal from '../CreateReviewModal';
+import OpenModalButton from '../OpenModalButton';
 
 
 const SingleSpotShow = () => {
@@ -14,18 +16,14 @@ const SingleSpotShow = () => {
 
   const spot = useSelector(state => state.spots.singleSpot);
   const reviews = useSelector(state => state.reviews.currentSpotReviews);
-  console.log(reviews)
 
   useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch]);
   useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch]);
 
-  if (!spot || !spot.Owner || !reviews) return null;
+  if (!spot || !spot.Owner || !reviews ) return null;
 
-  const avgRating2 = (Math.round(spot.avgRating * 10) / 10).toString()
-  const avgRating3 = avgRating2.split('.').length === 1 ? avgRating2 + '.0' : avgRating2;
-
-  const price1 = (Math.round(spot.price * 100) / 100).toString()
-  let price2 = price1.split('.').length === 1 ? price1 + '.00' : price1;
+  const avgRating = Number.parseFloat(spot.avgRating).toFixed(1)
+  const price = Number.parseFloat(spot.price).toFixed(2)
 
   return (
     <section id='single-spot'>
@@ -40,10 +38,10 @@ const SingleSpotShow = () => {
         <div id="reserve-container">
           <div id="reserve-container-child1">
             <div>
-              <span id="reserve-container-price">${price2}</span><span id="reserve-container-child1-night"> night</span>
+              <span id="reserve-container-price">${price}</span><span id="reserve-container-child1-night"> night</span>
             </div>
             <div>
-              <i className="fa-regular fa-star"></i><span>{avgRating3}</span><span>{spot.numReviews}</span>
+              <i className="fa-regular fa-star"></i><span>{avgRating}</span>
             </div>
           </div>
           <div className='reserve-button-container'>
@@ -55,11 +53,12 @@ const SingleSpotShow = () => {
         </div>
       </div>
       <div>
-        <div><i className="fa-regular fa-star"></i> New</div>
+        <div><i className="fa-regular fa-star"></i>{avgRating} --- {spot.numReviews} Review</div>
         <div className='review-button-container'>
-            <button className="review-button" type="button">
-                Post Your Review
-            </button>
+        <OpenModalButton
+          buttonText="Post Your Review"
+          modalComponent={<CreateReviewModal />}
+        />
         </div>
         <ul className='single-spot-display-reviews-list'>
           <DisplayReviews spotId={ spotId }/>
