@@ -14,15 +14,17 @@ const SingleSpotShow = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
 
+
   const spot = useSelector(state => state.spots.singleSpot);
   const reviews = useSelector(state => state.reviews.currentSpotReviews);
 
-  useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch]);
-  useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch]);
+  useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch, spotId]);
+  useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch, spotId]);
 
   if (!spot || !spot.Owner || !reviews ) return null;
 
-  const avgRating = Number.parseFloat(spot.avgRating).toFixed(1)
+  let avgRating = Number.parseFloat(spot.avgRating).toFixed(1);
+  if (avgRating == 0) avgRating = 'New'
   const price = Number.parseFloat(spot.price).toFixed(2)
 
   return (
@@ -53,7 +55,7 @@ const SingleSpotShow = () => {
         </div>
       </div>
       <div>
-        <div><i className="fa-regular fa-star"></i>{avgRating} --- {spot.numReviews} Review</div>
+        <div><i className="fa-regular fa-star"></i>{avgRating === 'New' ? avgRating : avgRating + ' - ' + spot.numReviews + ' reviews'} </div>
         <div className='review-button-container'>
         <OpenModalButton
           buttonText="Post Your Review"

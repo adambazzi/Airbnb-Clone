@@ -1,11 +1,11 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { getSpots } from '../../store/Spots';
-import { createSpot } from '../../store/Spots';
+import { useHistory, useParams } from 'react-router-dom';
+import { editSpot } from '../../store/Spots';
 import './index.css'
+import { getSingleSpot } from '../../store/Spots';
 
-const SpotForm = () => {
+const EditSpotForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { spotId } = useParams();
@@ -13,101 +13,76 @@ const SpotForm = () => {
   const user = useSelector(state => state.session.user)
   const currentSpot = useSelector(state => state.spots.singleSpot)
 
-  useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch]);
-
-
+  useEffect(() => {dispatch(getSingleSpot(spotId))}, []);
 
 
   const [spotStateObject, setSpotStateObject] = useState({
-    country: currentSpot ? currentSpot.country : '',
-    streetAddress: currentSpot ? currentSpot.streetAddress : '',
-    city: currentSpot ? currentSpot.city : '',
-    state: currentSpot ? currentSpot.state : '',
-    latitude: currentSpot ? currentSpot.latitude : '',
-    longitude: currentSpot ? currentSpot.longitude : '',
-    description: currentSpot ? currentSpot.description : '',
-    name: currentSpot ? currentSpot.name : '',
-    price: currentSpot ? currentSpot.price : '',
-    previewImage: currentSpot.SpotImages[0].url ? currentSpot.SpotImages[0].url : '',
-    image1: currentSpot.SpotImages[1].url ? currentSpot.SpotImages[1].url : '',
-    image2: currentSpot.SpotImages[2].url ? currentSpot.SpotImages[2].url : '',
-    image3: currentSpot.SpotImages[3].url ? currentSpot.SpotImages[3].url : '',
-    image4: currentSpot.SpotImages[4].url ? currentSpot.SpotImages[4].url : ''
+    country: '',
+    address: '',
+    city: '',
+    state: '',
+    lat: '',
+    lng: '',
+    description: '',
+    name: '',
+    price: '',
   })
 
-  const updateCountry = (e) => setSpotStateObject.country(e.target.value);
-  const updateStreetAddress = (e) => setSpotStateObject.address(e.target.value);
-  const updateCity = (e) => setSpotStateObject.city(e.target.value);
-  const updateState = (e) => setSpotStateObject.state(e.target.value);
-  const updateLatitude = (e) => setSpotStateObject.latitude(e.target.value);
-  const updateLongitude = (e) => setSpotStateObject.longitude(e.target.value);
-  const updateDescription = (e) => setSpotStateObject.description(e.target.value);
-  const updateName = (e) => setSpotStateObject.name(e.target.value);
-  const updatePrice = (e) => setSpotStateObject.price(e.target.value);
-  const updatePreviewImage = (e) => setSpotStateObject.previewImage(e.target.value);
-  const updateImage1 = (e) => setSpotStateObject.image1(e.target.value);
-  const updateImage2 = (e) => setSpotStateObject.image2(e.target.value);
-  const updateImage3 = (e) => setSpotStateObject.image3(e.target.value);
-  const updateImage4 = (e) => setSpotStateObject.image4(e.target.value);
+  useEffect(()=> {
+    const updatedSpot = {
+        ...spotStateObject,
+        address: currentSpot.address,
+        city: currentSpot.city,
+        state: currentSpot.state,
+        country: currentSpot.country,
+        lat: currentSpot.lat,
+        lng: currentSpot.lng,
+        name: currentSpot.name,
+        description: currentSpot.description,
+        price: Number(currentSpot.price)
+    }
+    setSpotStateObject(updatedSpot)
+  }, [])
 
-  useEffect(() => {
-    dispatch(getSpots());
-  }, [dispatch]);
+  const handleChange = e => {
+    const changeSpot = {...spotStateObject, [e.target.name]: e.target.value}
+    setSpotStateObject(changeSpot)
+  }
 
-const handleSubmit = async (e) => {
+
+const handleSubmit = (e) => {
     e.preventDefault();
+
 
     const payload = {
         spot: {
             ownerId: user.id,
-            address: spotStateObject.streetAddress,
+            address: spotStateObject.address,
             city: spotStateObject.city,
             state: spotStateObject.state,
             country: spotStateObject.country,
-            lat: spotStateObject.latitude,
-            lng: spotStateObject.longitude,
+            lat: spotStateObject.lat,
+            lng: spotStateObject.lng,
             name: spotStateObject.name,
             description: spotStateObject.description,
             price: spotStateObject.price,
-        },
-        images: {
-            previewImage: {
-                url: spotStateObject.previewImage,
-                preview: true
-            },
-            image1: {
-                url: spotStateObject.image1,
-                preview: false
-            },
-            image2: {
-                url: spotStateObject.image2,
-                preview: false
-            },
-            image3: {
-                url: spotStateObject.image3,
-                preview: false
-            },
-            image4: {
-                url: spotStateObject.image4,
-                preview: false
-            }
         }
     };
 
-    let createdSpotId = await dispatch(editSpot(payload));
+    let createdSpotId = dispatch(editSpot(payload, spotId));
 
     if (createdSpotId) {
-        history.push(`/spots/${createdSpotId}`);
+        history.push('/spots/current');
     }
 }
 
-if(!currentSpot) return null;
+if(!spotStateObject.name || !currentSpot.name) return null;
 
 
   return (
     <section id='spot-form-section'>
         <div id='spot-form-container'>
-            <h2>Create a new Spot</h2>
+            <h2>Update your Spot</h2>
             <h3>Where's your place located?</h3>
             <p>Guests will only get your exact address once they booked a reservation</p>
             <form className='spot-form' onSubmit={handleSubmit}>
@@ -116,9 +91,10 @@ if(!currentSpot) return null;
                     <label>
                         Country
                     <input
+                        name='country'
                         type="text"
-                        value={country}
-                        onChange={updateCountry}
+                        value={spotStateObject.country}
+                        onChange={handleChange}
                         required
                         placeholder="Country"
                     />
@@ -127,9 +103,10 @@ if(!currentSpot) return null;
                     <label>
                         Street Address
                     <input
+                        name='address'
                         type="text"
-                        value={streetAddress}
-                        onChange={updateStreetAddress}
+                        value={spotStateObject.address}
+                        onChange={handleChange}
                         required
                         placeholder="Address"
                     />
@@ -140,9 +117,10 @@ if(!currentSpot) return null;
                     <label id='city'>
                         City
                     <input
+                        name='city'
                         type="text"
-                        value={city}
-                        onChange={updateCity}
+                        value={spotStateObject.city}
+                        onChange={handleChange}
                         required
                         placeholder="City"
                     />
@@ -152,9 +130,10 @@ if(!currentSpot) return null;
                     <label id='state'>
                         State
                     <input
+                        name='state'
                         type="text"
-                        value={state}
-                        onChange={updateState}
+                        value={spotStateObject.state}
+                        onChange={handleChange}
                         required
                         placeholder="State"
                     />
@@ -165,9 +144,10 @@ if(!currentSpot) return null;
                     <label id='Latitude'>
                         Latitude
                     <input
+                        name='lat'
                         type="number"
-                        value={latitude}
-                        onChange={updateLatitude}
+                        value={spotStateObject.lat}
+                        onChange={handleChange}
                         required
                         placeholder="Latitude"
                     />
@@ -177,9 +157,10 @@ if(!currentSpot) return null;
                     <label id='Longitude'>
                         Longitude
                     <input
+                        name='lng'
                         type="number"
-                        value={longitude}
-                        onChange={updateLongitude}
+                        value={spotStateObject.lng}
+                        onChange={handleChange}
                         required
                         placeholder="Longitude"
                     />
@@ -191,13 +172,13 @@ if(!currentSpot) return null;
                     <p>Mention the best features of your space, any special amentities like
                         fast wifi or parking, and what you love about the neighborhood.</p>
                     <textarea 
+                        name='description'
                         type="text"
-                        value={description}
-                        onChange={updateDescription}
+                        value={spotStateObject.description}
+                        onChange={handleChange}
                         required
-                        placeholder="Description"
+                        placeholder='Please write at least 30 characters'
                     >
-                        Please write at least 30 characters
                     </textarea>
                 </div>
                 {/* name */}
@@ -207,9 +188,10 @@ if(!currentSpot) return null;
                     <label>
                         Name
                     <input
+                        name='name'
                         type="text"
-                        value={name}
-                        onChange={updateName}
+                        value={spotStateObject.name}
+                        onChange={handleChange}
                         required
                         placeholder="Name of your spot"
                     />
@@ -222,56 +204,17 @@ if(!currentSpot) return null;
                     <label>
                         $
                     <input
+                        name='price'
                         type="text"
-                        value={price}
-                        onChange={updatePrice}
+                        value={spotStateObject.price}
+                        onChange={handleChange}
                         required
                         placeholder='Price per night (USD)'
                     />
                     </label>
                 </div>
-                {/* photos */}
-                <div id='photos'>
-                    <h2>Liven up your spot with photos</h2>
-                    <p>Submit a link to at least one photo to publish your spot.</p>
-                    <input
-                        type="text"
-                        value={previewImage}
-                        onChange={updatePreviewImage}
-                        required
-                        placeholder='Preview Image URL'
-                    />
-                    <input
-                        type="text"
-                        value={image1}
-                        onChange={updateImage1}
-                        required
-                        placeholder='Image URL'
-                    />
-                    <input
-                        type="text"
-                        value={image2}
-                        onChange={updateImage2}
-                        required
-                        placeholder='Image URL'
-                    />
-                    <input
-                        type="text"
-                        value={image3}
-                        onChange={updateImage3}
-                        required
-                        placeholder='Image URL'
-                    />
-                    <input
-                        type="text"
-                        value={image4}
-                        onChange={updateImage4}
-                        required
-                        placeholder='Image URL'
-                    />
-                </div>
                 <div id='submit-container'>
-                    <button type="submit" id='button'>Create Spot</button>
+                    <button type="submit" id='button'>Edit Spot</button>
                 </div>
             </form>
         </div>
@@ -279,4 +222,4 @@ if(!currentSpot) return null;
   )
 };
 
-export default SpotForm;
+export default EditSpotForm;

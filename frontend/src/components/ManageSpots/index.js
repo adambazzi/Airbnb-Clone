@@ -18,7 +18,7 @@ const ManageSpots = () => {
   return (
     <section id='current-spots'>
       <div id='current-spot-tiles'>
-        {Object.values(spots).map(spot => <SpotTile spot={spot} />)}
+        {Object.values(spots).map(spot => <SpotTile spot={spot} key={spot.id}/>)}
       </div>
     </section>
   )

@@ -8,6 +8,7 @@ import Spots from "./components/SpotsShow"
 import SingleSpotShow from "./components/SingleSpotShow";
 import SpotForm from "./components/SpotForm";
 import ManageSpots from "./components/ManageSpots";
+import EditSpotForm from "./components/EditSpotForm";
 
 
 function App() {
@@ -33,6 +34,9 @@ function App() {
           </Route>
           <Route exact path ="/spots/current">
             <ManageSpots />
+          </Route>
+          <Route exact path ="/spots/:spotId/edit">
+            <EditSpotForm />
           </Route>
           <Route exact path ="/spots/:spotId">
             <SingleSpotShow />

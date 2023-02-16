@@ -157,7 +157,6 @@ const handleSubmit = async (e) => {
                         type="number"
                         value={latitude}
                         onChange={updateLatitude}
-                        required
                         placeholder="Latitude"
                     />
                     </label>
@@ -169,7 +168,6 @@ const handleSubmit = async (e) => {
                         type="number"
                         value={longitude}
                         onChange={updateLongitude}
-                        required
                         placeholder="Longitude"
                     />
                     </label>
@@ -234,28 +232,24 @@ const handleSubmit = async (e) => {
                         type="text"
                         value={image1}
                         onChange={updateImage1}
-                        required
                         placeholder='Image URL'
                     />
                     <input
                         type="text"
                         value={image2}
                         onChange={updateImage2}
-                        required
                         placeholder='Image URL'
                     />
                     <input
                         type="text"
                         value={image3}
                         onChange={updateImage3}
-                        required
                         placeholder='Image URL'
                     />
                     <input
                         type="text"
                         value={image4}
                         onChange={updateImage4}
-                        required
                         placeholder='Image URL'
                     />
                 </div>

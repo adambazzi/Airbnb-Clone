@@ -1,11 +1,11 @@
-#spot-gallery {
+#current-spots {
     display: flex;
     justify-content: center;
     flex-direction: column;
     width: 80%;
     margin: 0px 10%;
 }
-#spot-tiles {
+#current-spot-tiles {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 5%;
@@ -14,23 +14,23 @@
 }
 
 @media screen and (min-width: 1570px){
-    #spot-tiles {
+    #current-spot-tiles {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 @media screen and (max-width: 1570px){
-    #spot-tiles {
+    #current-spot-tiles {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media screen and (max-width: 1070px){
-    #spot-tiles {
+    #current-spot-tiles {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 @media screen and (max-width: 870px){
-    #spot-tiles {
+    #current-spot-tiles {
         grid-template-columns: repeat(1, 1fr);
     }
 }

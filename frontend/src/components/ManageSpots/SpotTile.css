@@ -1,4 +1,4 @@
-.spot-tile {
+.manage-spot-tile {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,7 +16,7 @@
     font-family: Helvetica;
 }
 
-.spot-tile-image {
+.manage-spot-tile-image {
     width: 270px;
     height: 250px;
     background-position: center;
@@ -25,13 +25,13 @@
     object-fit: cover;
 }
 
-.spot-tile-preview-information {
+.manage-spot-tile-preview-information {
     display: flex;
     flex-direction: column;
     width: 100%
 }
 
-.spot-tile-city-state-stars {
+.manage-spot-tile-city-state-stars {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -39,17 +39,17 @@
     margin: 3px;
 }
 
-.spot-tile-price {
+.manage-spot-tile-price {
     display: flex;
     justify-content: left;
     margin: 3px;
 }
 
-.spot-tile-stars {
+.manage-spot-tile-stars {
     margin: 3px;
 }
 
-#spot-gallery {
+#manage-spot-gallery {
     display: flex;
     width: 100%;
     justify-content: center;

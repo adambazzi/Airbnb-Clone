@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createReview } from "../../store/Reviews";
+import { createReview, getSpotReviews } from "../../store/Reviews";
 import { useModal } from "../../context/Modal";
 import './index.css'
-import { useParams } from "react-router-dom";
 
 
 function CreateReviewModal() {
@@ -16,7 +15,7 @@ function CreateReviewModal() {
   const user = useSelector(state => state.session.user)
   const spotId = useSelector(state => state.spots.singleSpot.id)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
@@ -26,8 +25,11 @@ function CreateReviewModal() {
       stars: Number(stars)
     }
 
-    return dispatch(createReview(payload))
-     .then(closeModal)
+    await dispatch(createReview(payload, spotId));
+
+    await dispatch(getSpotReviews(spotId));
+
+    closeModal();
 
   };
 

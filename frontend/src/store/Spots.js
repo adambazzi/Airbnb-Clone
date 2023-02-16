@@ -59,10 +59,8 @@ export const createSpot = data => async dispatch => {
   }
   for (let image of Object.values(data.images)) {
     image.spotId = spotPayload.id
-
-    let imageResponse
     if (image.url !== '') {
-      imageResponse = await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
+      await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -84,7 +82,7 @@ export const createSpot = data => async dispatch => {
 
 };
 
-export const getCurrentUserSpots = spotId => async dispatch => {
+export const getCurrentUserSpots = () => async dispatch => {
   const response = await csrfFetch('/api/spots/current');
   if (response.ok) {
     const payload = await response.json();
@@ -93,16 +91,26 @@ export const getCurrentUserSpots = spotId => async dispatch => {
 }
 
 export const deleteSpot = spotId => async dispatch => {
-    const response = csrfFetch(`/api/spots/${spotId}`, {
-      method: 'delete',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'DELETE'
     })
-    if(response.ok) {
-      dispatch(loadSpots())
-    }
 
+}
+
+export const editSpot = (data, spotId) => async dispatch => {
+  const spotResponse = await csrfFetch(`/api/spots/${spotId}`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data.spot)
+  });
+
+  let spotPayload
+  if (spotResponse.ok) {
+    spotPayload = await spotResponse.json()
+    dispatch(addSpot(spotPayload));
+  }
 }
 
 const initialState = {
@@ -128,14 +136,12 @@ const spotsReducer = (state = initialState, action) => {
         singleSpot: { ...action.payload }
       };
     case ADD_SPOT:
-      if (!state.allSpots[action.payload.id]) {
-        const allSpots = { ...state.allSpots }
-        allSpots[action.payload.id] = { ...action.payload }
-        const newState = {
-          ...state,
-          allSpots
-        };
-        return newState;
+      const allSpots2 = { ...state.allSpots }
+      allSpots2[action.payload.id] = { ...action.payload }
+
+      return {
+        ...state,
+        allSpots: allSpots2
       }
     case LOAD_CURRENT_USER_SPOTS:
       const currentUserSpots = {};
