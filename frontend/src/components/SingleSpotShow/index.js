@@ -8,6 +8,7 @@ import './index.css'
 import DisplayReviews from './DisplayReviews';
 import CreateReviewModal from '../CreateReviewModal';
 import OpenModalButton from '../OpenModalButton';
+import { clearSpot } from '../../store/Spots';
 
 
 const SingleSpotShow = () => {
@@ -17,8 +18,12 @@ const SingleSpotShow = () => {
 
   const spot = useSelector(state => state.spots.singleSpot);
   const reviews = useSelector(state => state.reviews.currentSpotReviews);
+  const user = useSelector(state => state.session.user)
 
-  useEffect(() => {dispatch(getSingleSpot(spotId))}, [dispatch, spotId]);
+  useEffect(() => {
+    dispatch(getSingleSpot(spotId))
+    return () => dispatch(clearSpot())
+  }, [dispatch, spotId]);
   useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch, spotId]);
 
   if (!spot || !spot.Owner || !reviews ) return null;
@@ -26,8 +31,13 @@ const SingleSpotShow = () => {
   const reviewsArray = Object.values(reviews)
   let avgRating = (reviewsArray.reduce((acc, b) => acc + b.stars, 0)/reviewsArray.length).toFixed(1)
   if (!(avgRating > 0)) avgRating = 'New'
-  console.log(avgRating)
   const price = Number.parseFloat(spot.price).toFixed(2)
+  let userHasPosted
+  if (user) userHasPosted = reviewsArray.find(el => el.userId == user.id)
+
+  if (!Object.values(spot).length) {
+    return null;
+  }
 
   return (
     <section id='single-spot'>
@@ -49,7 +59,7 @@ const SingleSpotShow = () => {
             </div>
           </div>
           <div className='reserve-button-container'>
-            <button className="reserve-button" type="button">
+            <button className="reserve-button" type="button" onClick={() => alert('Feature Coming Soon...')()}>
                 Reserve
             </button>
           </div>
@@ -57,12 +67,12 @@ const SingleSpotShow = () => {
         </div>
       </div>
       <div>
-        <div><i className="fa-regular fa-star"></i>{avgRating === 'New' ? avgRating : avgRating + ' - ' + reviewsArray.length + ' reviews'} </div>
+        <div><i className="fa-regular fa-star"></i>{avgRating === 'New' ? avgRating : avgRating + ' · ' + reviewsArray.length + ' reviews'} </div>
         <div className='review-button-container'>
-        <OpenModalButton
+        {!userHasPosted && user ? (<OpenModalButton
           buttonText="Post Your Review"
           modalComponent={<CreateReviewModal />}
-        />
+        />) : ''}
         </div>
         <ul className='single-spot-display-reviews-list'>
           <DisplayReviews spotId={ spotId }/>

@@ -28,6 +28,20 @@ const EditSpotForm = () => {
     price: '',
   })
 
+  const [validationErrors, setValidationErrors] = useState({
+    country: '',
+    address: '',
+    city: '',
+    state: '',
+    lat: '',
+    lng: '',
+    description: '',
+    name: '',
+    price: '',
+    previewImage: '',
+    imageType: ''
+})
+
   useEffect(()=> {
     const updatedSpot = {
         ...spotStateObject,
@@ -69,22 +83,38 @@ const handleSubmit = (e) => {
         }
     };
 
-    let createdSpotId = dispatch(editSpot(payload, spotId));
+    //checks form
+    const errors = {}
+    if (!payload.spot.country.length) errors.country = 'Country is required';
+    if (!payload.spot.state.length) errors.state = 'State is required';
+    if (!payload.spot.city.length) errors.city = 'City is required';
+    if (!payload.spot.address.length) errors.address = 'Address is required';
+    if (!payload.spot.lat.toString().length) errors.lat = 'Latitude is required';
+    if (!payload.spot.lng.toString().length) errors.lng = 'Longitude is required';
+    if (payload.spot.description.length < 30) errors.description = 'Description needs a minimum of 30 characters';
+    if (!payload.spot.name.length) errors.name = 'Name is required';
+    if (!payload.spot.price.toString().length) errors.price = 'Price is required';
 
-    if (createdSpotId) {
+    if (!Object.values(errors).length) {
+        dispatch(editSpot(payload, spotId));
+
+
         history.push(`/spots/${spotId}`);
+
+        setSpotStateObject({
+            country: '',
+            address: '',
+            city: '',
+            state: '',
+            lat: '',
+            lng: '',
+            description: '',
+            name: '',
+            price: '',
+        })
+    } else {
+        setValidationErrors(errors)
     }
-    setSpotStateObject({
-        country: '',
-        address: '',
-        city: '',
-        state: '',
-        lat: '',
-        lng: '',
-        description: '',
-        name: '',
-        price: '',
-    })
 }
 
 if(!spotStateObject.name || !currentSpot.name) return null;
@@ -100,7 +130,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                 <div id='spot-form-area-1'>
                     {/* country */}
                     <label>
-                        Country
+                        <div>Country <span className='validationErrors'>{validationErrors.address}</span></div>
                     <input
                         name='country'
                         type="text"
@@ -112,7 +142,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                     </label>
                     {/* Street address */}
                     <label>
-                        Street Address
+                        <div>Street Address <span className='validationErrors'>{validationErrors.country}</span></div>
                     <input
                         name='address'
                         type="text"
@@ -126,7 +156,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                 <div id='spot-form-area-2'>
                     {/* City */}
                     <label id='city'>
-                        City
+                        <div>City <span className='validationErrors'>{validationErrors.city}</span></div>
                     <input
                         name='city'
                         type="text"
@@ -139,7 +169,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                     <div class='comma'>,</div>
                     {/* State */}
                     <label id='state'>
-                        State
+                        <div>State <span className='validationErrors'>{validationErrors.state}</span></div>
                     <input
                         name='state'
                         type="text"
@@ -153,7 +183,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                 <div id='spot-form-area-3'>
                     {/* Latitude */}
                     <label id='Latitude'>
-                        Latitude
+                        <div>Latitude <span className='validationErrors'>{validationErrors.lat}</span></div>
                     <input
                         name='lat'
                         type="number"
@@ -166,7 +196,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                     <div class='comma'>,</div>
                     {/* Longitude */}
                     <label id='Longitude'>
-                        Longitude
+                        <div>Longitude <span className='validationErrors'>{validationErrors.lng}</span></div>
                     <input
                         name='lng'
                         type="number"
@@ -191,6 +221,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                         placeholder='Please write at least 30 characters'
                     >
                     </textarea>
+                    <div className='validationErrors'>{validationErrors.description}</div>
                 </div>
                 {/* name */}
                 <div id='title'>
@@ -207,6 +238,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                         placeholder="Name of your spot"
                     />
                     </label>
+                    <div className='validationErrors'>{validationErrors.name}</div>
                 </div>
                 {/* price */}
                 <div id='price'>
@@ -223,6 +255,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                         placeholder='Price per night (USD)'
                     />
                     </label>
+                    <div className='validationErrors'>{validationErrors.price}</div>
                 </div>
                 <div id='submit-container'>
                     <button type="submit" id='button'>Edit Spot</button>

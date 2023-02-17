@@ -4,6 +4,7 @@ const LOAD_SPOTS = 'spots/LOAD_SPOTS'
 const LOAD_SPOT = 'spots/LOAD_SPOT'
 const ADD_SPOT = 'spots/ADD_SPOT'
 const LOAD_CURRENT_USER_SPOTS = 'spot/GET_CURRENT_USER_SPOTS'
+const REMOVE_SPOT = 'spot/CLEAR_SPOT'
 
 // action creators
 const loadSpots = payload => ({
@@ -23,6 +24,10 @@ const addSpot = payload => ({
 const loadCurrentUserSpots = payload => ({
   type: LOAD_CURRENT_USER_SPOTS,
   payload
+})
+
+const removeSpot = () => ({
+  type: REMOVE_SPOT
 })
 
 
@@ -113,6 +118,10 @@ export const editSpot = (data, spotId) => async dispatch => {
   }
 }
 
+export const clearSpot = () => async dispatch => {
+  dispatch(removeSpot())
+}
+
 const initialState = {
   allSpots: {},
   singleSpot: {},
@@ -145,6 +154,12 @@ const spotsReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUserSpots
+      }
+    case REMOVE_SPOT:
+      const clearSpot = {}
+      return {
+        ...state,
+        singleSpot: clearSpot
       }
     default:
       return state;

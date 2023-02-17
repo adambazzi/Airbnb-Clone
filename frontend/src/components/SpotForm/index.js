@@ -95,11 +95,11 @@ const SpotForm = () => {
         if (!payload.spot.state.length) errors.state = 'State is required';
         if (!payload.spot.city.length) errors.city = 'City is required';
         if (!payload.spot.address.length) errors.address = 'Address is required';
-        if (!payload.spot.lat.length) errors.lat = 'Latitude is required';
-        if (!payload.spot.lng.length) errors.lng = 'Longitude is required';
+        if (!payload.spot.lat.toString().length) errors.lat = 'Latitude is required';
+        if (!payload.spot.lng.toString().length) errors.lng = 'Longitude is required';
         if (payload.spot.description.length < 30) errors.description = 'Description needs a minimum of 30 characters';
         if (!payload.spot.name.length) errors.name = 'Name is required';
-        if (!payload.spot.price.length) errors.price = 'Price is required';
+        if (!payload.spot.price.toString().length) errors.price = 'Price is required';
         if (!payload.images.previewImage.url.length) errors.previewImage = 'Preview image is required';
         if (!payload.images.previewImage.url.endsWith('.png') && !payload.images.previewImage.url.endsWith('.jpg') && !payload.images.previewImage.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
         if (payload.images.image1.url.length && !payload.images.image1.url.endsWith('.png') && !payload.images.image1.url.endsWith('.jpg') && payload.images.image1.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';

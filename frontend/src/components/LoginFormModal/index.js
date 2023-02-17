@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
+import { useHistory } from "react-router-dom";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
+  const [disableButton, setDisableButton] = useState(true)
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (credential.length >= 4 && password.length >= 6)  setDisableButton(false)
+  }, [password, credential])
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
+    history.push('/')
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
       .catch(
@@ -27,6 +35,7 @@ function LoginFormModal() {
   const handleSubmitDemoUser = (e) => {
     e.preventDefault();
     setErrors([]);
+    history.push('/')
     return dispatch(sessionActions.login({ credential: 'Demo-lition', password: 'password' }))
       .then(closeModal)
       .catch(
@@ -38,36 +47,38 @@ function LoginFormModal() {
   };
 
   return (
-    <>
+    <div className="log-in">
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='log-in-form'>
         <ul>
           {errors.map((error, idx) => (
             <li key={idx}>{error}</li>
           ))}
         </ul>
         <label>
-          Username or Email
+
           <input
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
+            placeholder='Username or Email'
             required
           />
         </label>
         <label>
-          Password
+
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder='Password'
             required
           />
         </label>
-        <button type="submit">Log In</button>
-        <button onClick={handleSubmitDemoUser}>Demo User</button>
+        <button type="submit" id='log-in-button' disabled={disableButton} >Log In</button>
+        <button onClick={handleSubmitDemoUser} id='log-in-demo-user'>Demo User</button>
       </form>
-    </>
+    </div>
   );
 }
 

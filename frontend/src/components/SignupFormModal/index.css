@@ -1,0 +1,51 @@
+#sign-up {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#sign-up-form {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#sign-up-form input {
+    height: 20px;
+
+}
+#sign-up-form label {
+    margin-bottom: 10px;
+}
+
+#sign-in-button {
+    width: 100%;
+    height: 30px;
+    box-shadow: 2px 4px 0px rgb(111, 106, 106);
+    background-color: #FF5A5F;
+    color: white;
+}
+
+#sign-up h1 {
+    padding: 0 0 20px 0;
+    margin: 0;
+}
+
+#sign-up ul {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+    font-size: 14px;
+    color: #FF5A5F;
+}
+
+#sign-up li {
+    padding: 0 0 5px 0;
+    margin: 0px;
+}
+
+

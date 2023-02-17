@@ -16,6 +16,26 @@
     font-family: Helvetica;
 }
 
+.manage-spot-tile-link1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 270px;
+    height: 330px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-family: Helvetica;
+    margin: 0;
+    padding: 0;
+}
+
+
 .manage-spot-tile-image {
     width: 270px;
     height: 250px;
@@ -53,4 +73,52 @@
     display: flex;
     width: 100%;
     justify-content: center;
+}
+
+.manage-spot-tile-update-delete {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 12px 0;
+    margin: 0;
+}
+
+
+
+.manage-spot-tile-update {
+    display: flex;
+    height: 20px;
+    width: 60px;
+    font-size: 15px;
+    justify-content: center;
+    text-decoration: none;
+    color: black;
+    border: black 2px solid;
+    margin-right: 5px;
+    background-color: rgb(117, 112, 112);
+    color: white;
+    box-shadow: 2px 3px 0px black;
+    padding: 0;
+}
+
+.manage-spot-tile-update-delete button {
+    display: flex;
+    height: 25px;
+    width: 60px;
+    font-size: 15px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    border: black 2px solid;
+    margin-right: 5px;
+    padding: 0;
+    background-color: rgb(117, 112, 112);
+    color: white;
+    box-shadow: 2px 3px 0px black;
+}
+.manage-spot-tile-update-delete2 {
+    display: flex;
+    flex-direction: row;
 }

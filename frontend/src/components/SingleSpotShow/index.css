@@ -74,5 +74,7 @@
 }
 
 .single-spot-display-reviews-list {
-    list-style: none
+    list-style: none;
+    display: flex;
+    flex-direction: column-reverse;
 }
