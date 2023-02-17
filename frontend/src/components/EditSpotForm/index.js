@@ -8,12 +8,12 @@ import { getSingleSpot } from '../../store/Spots';
 const EditSpotForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { spotId } = useParams();
+  let { spotId } = useParams();
 
   const user = useSelector(state => state.session.user)
   const currentSpot = useSelector(state => state.spots.singleSpot)
 
-  useEffect(() => {dispatch(getSingleSpot(spotId))}, []);
+  useEffect(() => {dispatch(getSingleSpot(spotId))}, [spotId, dispatch]);
 
 
   const [spotStateObject, setSpotStateObject] = useState({
@@ -42,7 +42,7 @@ const EditSpotForm = () => {
         price: Number(currentSpot.price)
     }
     setSpotStateObject(updatedSpot)
-  }, [])
+  }, [currentSpot.address, currentSpot.city, currentSpot.state, currentSpot.country, currentSpot.lat, currentSpot.lng, currentSpot.name, currentSpot.description, currentSpot.price])
 
   const handleChange = e => {
     const changeSpot = {...spotStateObject, [e.target.name]: e.target.value}
@@ -72,8 +72,19 @@ const handleSubmit = (e) => {
     let createdSpotId = dispatch(editSpot(payload, spotId));
 
     if (createdSpotId) {
-        history.push('/spots/current');
+        history.push(`/spots/${spotId}`);
     }
+    setSpotStateObject({
+        country: '',
+        address: '',
+        city: '',
+        state: '',
+        lat: '',
+        lng: '',
+        description: '',
+        name: '',
+        price: '',
+    })
 }
 
 if(!spotStateObject.name || !currentSpot.name) return null;

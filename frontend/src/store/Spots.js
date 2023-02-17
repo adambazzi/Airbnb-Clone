@@ -136,15 +136,11 @@ const spotsReducer = (state = initialState, action) => {
         singleSpot: { ...action.payload }
       };
     case ADD_SPOT:
-      const allSpots2 = { ...state.allSpots }
-      allSpots2[action.payload.id] = { ...action.payload }
-
-      return {
-        ...state,
-        allSpots: allSpots2
-      }
+      const allSpots2 = { ...state }
+      allSpots2.allStates[action.payload.id] = action.payload
+      return allSpots2
     case LOAD_CURRENT_USER_SPOTS:
-      const currentUserSpots = {};
+      const currentUserSpots = { ...state.currentUserSpots };
       action.payload.Spots.forEach(spot => (currentUserSpots[spot.id] = spot));
       return {
         ...state,

@@ -1,112 +1,125 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getSpots } from '../../store/Spots';
 import { createSpot } from '../../store/Spots';
 import './index.css'
 
 const SpotForm = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-  const user = useSelector(state => state.session.user)
+    const user = useSelector(state => state.session.user)
 
-  const [country, setCountry] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [description, setDescription] = useState('');
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [previewImage, setPreviewImage] = useState('');
-  const [image1, setImage1] = useState('');
-  const [image2, setImage2] = useState('');
-  const [image3, setImage3] = useState('');
-  const [image4, setImage4] = useState('');
-  const [validationErrors, setValidationErrors] = useState({
-    country: '',
-    address: '',
-    city: '',
-    state: '',
-    lat: '',
-    lng: '',
-    description: '',
-    name: '',
-    price: '',
-    previewImage: '',
-    image1: '',
-    image2: '',
-    image3: '',
-    image4: '',
-  })
+    const [spotStateObject, setSpotStateObject] = useState({
+        country: '',
+        address: '',
+        city: '',
+        state: '',
+        lat: '',
+        lng: '',
+        description: '',
+        name: '',
+        price: '',
+        previewImage: '',
+        image1: '',
+        image2: '',
+        image3: '',
+        image4: ''
+    })
 
-  const updateCountry = (e) => setCountry(e.target.value);
-  const updateStreetAddress = (e) => setStreetAddress(e.target.value);
-  const updateCity = (e) => setCity(e.target.value);
-  const updateState = (e) => setState(e.target.value);
-  const updateLatitude = (e) => setLatitude(e.target.value);
-  const updateLongitude = (e) => setLongitude(e.target.value);
-  const updateDescription = (e) => setDescription(e.target.value);
-  const updateName = (e) => setName(e.target.value);
-  const updatePrice = (e) => setPrice(e.target.value);
-  const updatePreviewImage = (e) => setPreviewImage(e.target.value);
-  const updateImage1 = (e) => setImage1(e.target.value);
-  const updateImage2 = (e) => setImage2(e.target.value);
-  const updateImage3 = (e) => setImage3(e.target.value);
-  const updateImage4 = (e) => setImage4(e.target.value);
+    const [validationErrors, setValidationErrors] = useState({
+        country: '',
+        address: '',
+        city: '',
+        state: '',
+        lat: '',
+        lng: '',
+        description: '',
+        name: '',
+        price: '',
+        previewImage: '',
+        imageType: ''
+    })
 
-  useEffect(() => {
-    dispatch(getSpots());
-  }, [dispatch]);
+    const handleChange = e => {
+        const changeSpot = {...spotStateObject, [e.target.name]: e.target.value}
+        setSpotStateObject(changeSpot)
+      }
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    const payload = {
-        spot: {
-            ownerId: user.id,
-            address: streetAddress,
-            city: city,
-            state: state,
-            country: country,
-            lat: latitude,
-            lng: longitude,
-            name: name,
-            description: description,
-            price: price,
-        },
-        images: {
-            previewImage: {
-                url: previewImage,
-                preview: true
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const payload = {
+            spot: {
+                ownerId: user.id,
+                address: spotStateObject.address,
+                city: spotStateObject.city,
+                state: spotStateObject.state,
+                country: spotStateObject.country,
+                lat: spotStateObject.lat,
+                lng: spotStateObject.lng,
+                name: spotStateObject.name,
+                description: spotStateObject.description,
+                price: spotStateObject.price,
             },
-            image1: {
-                url: image1,
-                preview: false
-            },
-            image2: {
-                url: image2,
-                preview: false
-            },
-            image3: {
-                url: image3,
-                preview: false
-            },
-            image4: {
-                url: image4,
-                preview: false
+            images: {
+                previewImage: {
+                    url: spotStateObject.previewImage,
+                    preview: true
+                },
+                image1: {
+                    url: spotStateObject.image1,
+                    preview: false
+                },
+                image2: {
+                    url: spotStateObject.image2,
+                    preview: false
+                },
+                image3: {
+                    url: spotStateObject.image3,
+                    preview: false
+                },
+                image4: {
+                    url: spotStateObject.image4,
+                    preview: false
+                }
             }
+        };
+
+
+        //checks form
+        const errors = {}
+        if (!payload.spot.country.length) errors.country = 'Country is required';
+        if (!payload.spot.state.length) errors.state = 'State is required';
+        if (!payload.spot.city.length) errors.city = 'City is required';
+        if (!payload.spot.address.length) errors.address = 'Address is required';
+        if (!payload.spot.lat.length) errors.lat = 'Latitude is required';
+        if (!payload.spot.lng.length) errors.lng = 'Longitude is required';
+        if (payload.spot.description.length < 30) errors.description = 'Description needs a minimum of 30 characters';
+        if (!payload.spot.name.length) errors.name = 'Name is required';
+        if (!payload.spot.price.length) errors.price = 'Price is required';
+        if (!payload.images.previewImage.url.length) errors.previewImage = 'Preview image is required';
+        if (!payload.images.previewImage.url.endsWith('.png') && !payload.images.previewImage.url.endsWith('.jpg') && !payload.images.previewImage.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
+        if (payload.images.image1.url.length && !payload.images.image1.url.endsWith('.png') && !payload.images.image1.url.endsWith('.jpg') && payload.images.image1.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
+        if (payload.images.image2.url.length && !payload.images.image2.url.endsWith('.png') && !payload.images.image2.url.endsWith('.jpg') && payload.images.image2.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
+        if (payload.images.image3.url.length && !payload.images.image3.url.endsWith('.png') && !payload.images.image3.url.endsWith('.jpg') && payload.images.image3.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
+        if (payload.images.image4.url.length && !payload.images.image4.url.endsWith('.png') && !payload.images.image4.url.endsWith('.jpg') && payload.images.image4.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
+
+        if (!Object.values(errors).length) {
+            let createdSpotId = await dispatch(createSpot(payload));
+
+            if (createdSpotId) {
+                history.push(`/spots/${createdSpotId}`);
+            }
+
+        } else {
+            setValidationErrors(errors)
         }
-    };
 
-    let createdSpotId = await dispatch(createSpot(payload));
-
-    if (createdSpotId) {
-        history.push(`/spots/${createdSpotId}`);
     }
-}
+
 
 
   return (
@@ -119,23 +132,23 @@ const handleSubmit = async (e) => {
                 <div id='spot-form-area-1'>
                     {/* country */}
                     <label>
-                        Country
+                        <div>Country <span className='validationErrors'>{validationErrors.address}</span></div>
                     <input
+                        name='country'
                         type="text"
-                        value={country}
-                        onChange={updateCountry}
-                        required
+                        value={spotStateObject.country}
+                        onChange={handleChange}
                         placeholder="Country"
                     />
                     </label>
                     {/* Street address */}
                     <label>
-                        Street Address
+                        <div>Street Address <span className='validationErrors'>{validationErrors.country}</span></div>
                     <input
+                        name='address'
                         type="text"
-                        value={streetAddress}
-                        onChange={updateStreetAddress}
-                        required
+                        value={spotStateObject.address}
+                        onChange={handleChange}
                         placeholder="Address"
                     />
                     </label>
@@ -143,24 +156,24 @@ const handleSubmit = async (e) => {
                 <div id='spot-form-area-2'>
                     {/* City */}
                     <label id='city'>
-                        City
+                        <div>City <span className='validationErrors'>{validationErrors.city}</span></div>
                     <input
                         type="text"
-                        value={city}
-                        onChange={updateCity}
-                        required
+                        name='city'
+                        value={spotStateObject.city}
+                        onChange={handleChange}
                         placeholder="City"
                     />
                     </label>
-                    <div class='comma'>,</div>
+                    <div className='comma'>,</div>
                     {/* State */}
                     <label id='state'>
-                        State
+                        <div>State <span className='validationErrors'>{validationErrors.state}</span></div>
                     <input
                         type="text"
-                        value={state}
-                        onChange={updateState}
-                        required
+                        name='state'
+                        value={spotStateObject.state}
+                        onChange={handleChange}
                         placeholder="State"
                     />
                     </label>
@@ -168,22 +181,24 @@ const handleSubmit = async (e) => {
                 <div id='spot-form-area-3'>
                     {/* Latitude */}
                     <label id='Latitude'>
-                        Latitude
+                        <div>Latitude <span className='validationErrors'>{validationErrors.lat}</span></div>
                     <input
                         type="number"
-                        value={latitude}
-                        onChange={updateLatitude}
+                        name='lat'
+                        value={spotStateObject.lat}
+                        onChange={handleChange}
                         placeholder="Latitude"
                     />
                     </label>
-                    <div class='comma'>,</div>
+                    <div className='comma'>,</div>
                     {/* Longitude */}
                     <label id='Longitude'>
-                        Longitude
+                        <div>Longitude <span className='validationErrors'>{validationErrors.lng}</span></div>
                     <input
                         type="number"
-                        value={longitude}
-                        onChange={updateLongitude}
+                        name='lng'
+                        value={spotStateObject.lng}
+                        onChange={handleChange}
                         placeholder="Longitude"
                     />
                     </label>
@@ -195,13 +210,14 @@ const handleSubmit = async (e) => {
                         fast wifi or parking, and what you love about the neighborhood.</p>
                     <textarea 
                         type="text"
-                        value={description}
-                        onChange={updateDescription}
-                        required
+                        name='description'
+                        value={spotStateObject.description}
+                        onChange={handleChange}
                         placeholder="Description"
                     >
                         Please write at least 30 characters
                     </textarea>
+                    <div className='validationErrors'>{validationErrors.description}</div>
                 </div>
                 {/* name */}
                 <div id='title'>
@@ -211,12 +227,13 @@ const handleSubmit = async (e) => {
                         Name
                     <input
                         type="text"
-                        value={name}
-                        onChange={updateName}
-                        required
+                        value={spotStateObject.name}
+                        name='name'
+                        onChange={handleChange}
                         placeholder="Name of your spot"
                     />
                     </label>
+                    <div className='validationErrors'>{validationErrors.name}</div>
                 </div>
                 {/* price */}
                 <div id='price'>
@@ -226,12 +243,13 @@ const handleSubmit = async (e) => {
                         $
                     <input
                         type="text"
-                        value={price}
-                        onChange={updatePrice}
-                        required
+                        name='price'
+                        value={spotStateObject.price}
+                        onChange={handleChange}
                         placeholder='Price per night (USD)'
                     />
                     </label>
+                    <div className='validationErrors'>{validationErrors.price}</div>
                 </div>
                 {/* photos */}
                 <div id='photos'>
@@ -239,33 +257,39 @@ const handleSubmit = async (e) => {
                     <p>Submit a link to at least one photo to publish your spot.</p>
                     <input
                         type="text"
-                        value={previewImage}
-                        onChange={updatePreviewImage}
-                        required
+                        value={spotStateObject.previewImage}
+                        name='previewImage'
+                        onChange={handleChange}
                         placeholder='Preview Image URL'
                     />
+                    {validationErrors.previewImage ? (<div className='validationErrors'>{validationErrors.previewImage}</div>) : ''}
                     <input
                         type="text"
-                        value={image1}
-                        onChange={updateImage1}
+                        name='image1'
+                        value={spotStateObject.image1}
+                        onChange={handleChange}
+                        placeholder='Image URL'
+                    />
+                     {validationErrors.imageType ? (<div className='validationErrors'>{validationErrors.imageType}</div>) : ''}
+                    <input
+                        type="text"
+                        name='image2'
+                        value={spotStateObject.image2}
+                        onChange={handleChange}
                         placeholder='Image URL'
                     />
                     <input
                         type="text"
-                        value={image2}
-                        onChange={updateImage2}
+                        name='image3'
+                        value={spotStateObject.image3}
+                        onChange={handleChange}
                         placeholder='Image URL'
                     />
                     <input
                         type="text"
-                        value={image3}
-                        onChange={updateImage3}
-                        placeholder='Image URL'
-                    />
-                    <input
-                        type="text"
-                        value={image4}
-                        onChange={updateImage4}
+                        name='image4'
+                        value={spotStateObject.image4}
+                        onChange={handleChange}
                         placeholder='Image URL'
                     />
                 </div>

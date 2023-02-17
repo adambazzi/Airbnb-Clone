@@ -102,3 +102,7 @@ h2, h3 {
 p {
     font-size: 17px;
 }
+
+.validationErrors {
+    color: red
+}
