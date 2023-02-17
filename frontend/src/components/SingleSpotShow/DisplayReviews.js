@@ -23,10 +23,12 @@ const DisplayReviews = ({ spotId }) => {
         return (dateArray[0] + '-' + dateArray[1] + '-' + dateArray[2].slice(0,2));
     }
 
+
+
     return (
 
         <>
-            {reviewsArray.map(review =>
+            {reviewsArray.length > 0 && reviewsArray[0].User.firstName ? reviewsArray.map(review =>
                 <li key={review.id}>
                     <h4>{review.User.firstName}</h4>
                     <div>{dateFormat(review.createdAt)}</div>
@@ -37,7 +39,7 @@ const DisplayReviews = ({ spotId }) => {
                         modalComponent={<DeleteReviewModal reviewId={review.id} spotId={spotId} />}
                     /> : <div></div>}
                 </li>
-            )}
+            ) : (<li></li>)}
         </>
 
     )

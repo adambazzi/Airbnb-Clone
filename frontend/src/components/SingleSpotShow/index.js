@@ -23,8 +23,10 @@ const SingleSpotShow = () => {
 
   if (!spot || !spot.Owner || !reviews ) return null;
 
-  let avgRating = Number.parseFloat(spot.avgRating).toFixed(1);
-  if (avgRating == 0) avgRating = 'New'
+  const reviewsArray = Object.values(reviews)
+  let avgRating = (reviewsArray.reduce((acc, b) => acc + b.stars, 0)/reviewsArray.length).toFixed(1)
+  if (!(avgRating > 0)) avgRating = 'New'
+  console.log(avgRating)
   const price = Number.parseFloat(spot.price).toFixed(2)
 
   return (
@@ -55,7 +57,7 @@ const SingleSpotShow = () => {
         </div>
       </div>
       <div>
-        <div><i className="fa-regular fa-star"></i>{avgRating === 'New' ? avgRating : avgRating + ' - ' + spot.numReviews + ' reviews'} </div>
+        <div><i className="fa-regular fa-star"></i>{avgRating === 'New' ? avgRating : avgRating + ' - ' + reviewsArray.length + ' reviews'} </div>
         <div className='review-button-container'>
         <OpenModalButton
           buttonText="Post Your Review"

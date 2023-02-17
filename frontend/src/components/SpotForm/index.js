@@ -25,6 +25,22 @@ const SpotForm = () => {
   const [image2, setImage2] = useState('');
   const [image3, setImage3] = useState('');
   const [image4, setImage4] = useState('');
+  const [validationErrors, setValidationErrors] = useState({
+    country: '',
+    address: '',
+    city: '',
+    state: '',
+    lat: '',
+    lng: '',
+    description: '',
+    name: '',
+    price: '',
+    previewImage: '',
+    image1: '',
+    image2: '',
+    image3: '',
+    image4: '',
+  })
 
   const updateCountry = (e) => setCountry(e.target.value);
   const updateStreetAddress = (e) => setStreetAddress(e.target.value);
