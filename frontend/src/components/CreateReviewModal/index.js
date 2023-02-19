@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createReview, getSpotReviews } from "../../store/Reviews";
 import { useModal } from "../../context/Modal";
 import './index.css'
-
 
 function CreateReviewModal() {
   const dispatch = useDispatch();
@@ -11,9 +10,18 @@ function CreateReviewModal() {
   const [stars, setStars] = useState(5);
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
+  const [disableButton, setDisableButton] = useState(true)
 
   const user = useSelector(state => state.session.user)
   const spotId = useSelector(state => state.spots.singleSpot.id)
+
+  useEffect(() => {
+    if (review.length >= 10 && stars.length)  setDisableButton(false)
+  }, [review, stars])
+
+  useEffect(() => {
+    if (review.length < 10 || !stars.length)  setDisableButton(true)
+  }, [review, stars])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,17 +44,20 @@ function CreateReviewModal() {
   return (
     <>
       <h1>How was your stay?</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='review-form'>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
         <label>
-          <input
-            type="textbox"
+          <textarea
+            type="text"
+            rows="5"
+            cols="33"
             value={review}
             onChange={(e) => setReview(e.target.value)}
             placeholder='Just a quick review.'
             required
+            className="review-textbox"
           />
         </label>
         <div class="rate">
@@ -61,7 +72,7 @@ function CreateReviewModal() {
           <input type="radio" id="star1" name="rate" value="1" onChange={(e) => setStars(e.target.value)} />
           <label for="star1" title="text"></label>
         </div>
-        <button type="submit">Submit Your Review</button>
+        <button type="submit" disabled={disableButton}>Submit Your Review</button>
       </form>
     </>
   );

@@ -3,12 +3,15 @@ import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { useModal } from "../../context/Modal";
+import './index.css'
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
   const history = useHistory();
+  const {closeModal} = useModal();
 
   const openMenu = () => {
     if (showMenu) return;
@@ -32,7 +35,8 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
-    history.push('/')
+    closeModal();
+    history.push('/');
   };
 
   const ulClassName = "profile-dropdown dropdown-menu-display" + (showMenu ? "" : " hidden");
@@ -43,14 +47,17 @@ function ProfileButton({ user }) {
         <i className="fa-sharp fa-solid fa-bars"></i>
         <i className="fas fa-user-circle" />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
-        <li>{user.username}</li>
-        <li>{user.email}</li>
-        <li><NavLink exact to='/spots/current'>Manage Spots</NavLink></li>
-        <li>
-          <button onClick={logout}>Log Out</button>
-        </li>
-      </ul>
+      <div className="profile-dropdown-container">
+        <ul className={ulClassName} ref={ulRef}>
+          <li id='profile-username'>Hello, {user.username}</li>
+          <li id='profile-email'>{user.email}</li>
+          <li id='profile-manage-spots'><NavLink exact to='/spots/current'>Manage Spots</NavLink></li>
+          <li>
+            <button onClick={logout} id='log-out-button'>Log Out</button>
+          </li>
+        </ul>
+
+      </div>
     </>
   );
 }

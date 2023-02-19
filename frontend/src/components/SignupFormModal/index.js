@@ -20,6 +20,10 @@ function SignupFormModal() {
     if (email.length && username.length && firstName.length && lastName.length && password.length && confirmPassword.length)  setDisableButton(false)
   }, [email, username, firstName, lastName, password, confirmPassword])
 
+  useEffect(() => {
+    if (!email.length || !username.length || !firstName.length || !lastName.length || !password.length || !confirmPassword.length)  setDisableButton(true)
+  }, [email, username, firstName, lastName, password, confirmPassword])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {

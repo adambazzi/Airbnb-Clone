@@ -1,0 +1,30 @@
+.profile-dropdown-container {
+    position: absolute;
+    background-color: white;
+    width: 150px;
+}
+
+.dropdown-menu-display {
+    margin: 0;
+    padding: 0;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    list-style: none;
+}
+
+#profile-button {
+    margin-right: 20px;
+    width: 60px;
+    height: 27px;
+    border-radius: 8px;
+}
+
+#profile-email, #profile-manage-spots {
+    border-bottom: black 2px solid;
+}
+
+.profile-dropdown-container-logout-button {
+    border-radius: 2px;
+}

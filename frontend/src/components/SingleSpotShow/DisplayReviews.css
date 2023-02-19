@@ -1,3 +1,25 @@
 .single-spot-display-reviews {
     list-style: none;
 }
+.spot-review h4 {
+    padding: 0 0 5px 0;
+    margin: 0;
+    font-family: Helvetica, sans-serif;
+}
+
+.spot-review-date {
+    font-family: Helvetica, sans-serif;
+}
+
+.spot-review-review {
+    margin: 5px 0;
+    font-family: Helvetica, sans-serif;
+}
+.spot-review button {
+    background-color: gray;
+    color: white;
+    box-shadow: 2px 4px 0px black;
+}
+.spot-review {
+    padding: 10px 0;
+}

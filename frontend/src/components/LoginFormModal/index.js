@@ -18,6 +18,10 @@ function LoginFormModal() {
     if (credential.length >= 4 && password.length >= 6)  setDisableButton(false)
   }, [password, credential])
 
+  useEffect(() => {
+    if (credential.length < 4 || password.length < 6)  setDisableButton(true)
+  }, [password, credential])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -63,6 +67,8 @@ function LoginFormModal() {
             onChange={(e) => setCredential(e.target.value)}
             placeholder='Username or Email'
             required
+            id='username'
+            name="username"
           />
         </label>
         <label>
@@ -75,7 +81,7 @@ function LoginFormModal() {
             required
           />
         </label>
-        <button type="submit" id='log-in-button' disabled={disableButton} >Log In</button>
+        <button type="submit" id='log-in-button' disabled={disableButton} value="Login">Log In</button>
         <button onClick={handleSubmitDemoUser} id='log-in-demo-user'>Demo User</button>
       </form>
     </div>

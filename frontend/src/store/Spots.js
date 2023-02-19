@@ -3,8 +3,9 @@ import { csrfFetch } from "./csrf";
 const LOAD_SPOTS = 'spots/LOAD_SPOTS'
 const LOAD_SPOT = 'spots/LOAD_SPOT'
 const ADD_SPOT = 'spots/ADD_SPOT'
-const LOAD_CURRENT_USER_SPOTS = 'spot/GET_CURRENT_USER_SPOTS'
-const REMOVE_SPOT = 'spot/CLEAR_SPOT'
+const LOAD_CURRENT_USER_SPOTS = 'spots/GET_CURRENT_USER_SPOTS'
+const REMOVE_CURRENT_USER_SPOT = 'spots/REMOVE_CURRENT_USER_SPOT'
+const REMOVE_SPOT = 'spots/CLEAR_SPOT'
 
 // action creators
 const loadSpots = payload => ({
@@ -28,6 +29,11 @@ const loadCurrentUserSpots = payload => ({
 
 const removeSpot = () => ({
   type: REMOVE_SPOT
+})
+
+const removeCurrentUserSpot = (payload) => ({
+  type: REMOVE_CURRENT_USER_SPOT,
+  payload
 })
 
 
@@ -96,10 +102,10 @@ export const getCurrentUserSpots = () => async dispatch => {
 }
 
 export const deleteSpot = spotId => async dispatch => {
-    await csrfFetch(`/api/spots/${spotId}`, {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
       method: 'DELETE'
     })
-
+    dispatch(removeCurrentUserSpot(spotId));
 }
 
 export const editSpot = (data, spotId) => async dispatch => {
@@ -155,6 +161,10 @@ const spotsReducer = (state = initialState, action) => {
         ...state,
         currentUserSpots
       }
+    case REMOVE_CURRENT_USER_SPOT:
+      const currentUserSpots2 = { ...state };
+      delete currentUserSpots2.currentUserSpots[action.payload];
+      return currentUserSpots2
     case REMOVE_SPOT:
       const clearSpot = {}
       return {

@@ -33,3 +33,50 @@
 .rate > label:hover ~ input:checked ~ label {
     color: #c59b08;
 }
+
+input[type="textarea"] {
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+  }
+
+input[type="textarea"] {
+width: 100%;
+margin: 0;
+padding: 0;
+height: 100px;
+}
+
+.review-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.review-form label {
+    width: 90%;
+}
+
+.review-form h1 {
+    padding: 0;
+    margin: 0;
+}
+.review-form button {
+    box-shadow: 2px 4px 0px black;
+    background-color: #FF5A5F;
+    color: white;
+    height: 40px;
+    font-size: 18px;
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.review-form button:disabled {
+    opacity: 0.5;
+}
+
+.review-form input[type="text"]:valid[minlength="10"] + input[type="radio"]:valid[minlength="1"] + button:disabled {
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: auto;
+}

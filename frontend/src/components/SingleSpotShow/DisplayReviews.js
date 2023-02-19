@@ -29,10 +29,10 @@ const DisplayReviews = ({ spotId }) => {
 
         <>
             {reviewsArray.length > 0 && reviewsArray[0].User.firstName ? reviewsArray.map(review =>
-                <li key={review.id}>
+                <li key={review.id} className='spot-review'>
                     <h4>{review.User.firstName}</h4>
-                    <div>{dateFormat(review.createdAt)}</div>
-                    <div>{review.review}</div>
+                    <div className="spot-review-date">{dateFormat(review.createdAt)}</div>
+                    <div className="spot-review-review">{review.review}</div>
                     {user.id === review.userId ?
                     <OpenModalButton
                         buttonText="Delete"
