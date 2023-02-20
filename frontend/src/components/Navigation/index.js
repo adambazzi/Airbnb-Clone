@@ -9,6 +9,7 @@ import './index.css';
 
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
+  const title = useSelector(state => state.title);
 
   let sessionLinks;
   if (sessionUser) {
