@@ -29,11 +29,16 @@ const checkSpotImage = async (req,res,next) => {
     next()
 }
 
-router.delete('/:imageId', requireAuth, checkSpotImage, checkSpotImageAuthorization, async (req,res,next) => {
+router.delete('/:imageId', requireAuth, checkSpotImage, checkSpotImageAuthorization, async (req, res, next) => {
+    // Find the spot image by ID
     const spotImage = await SpotImage.findByPk(req.params.imageId);
-    await spotImage.destroy()
 
-    res.status(200).json("Successfully deleted")
-})
+    // Delete the spot image from the database
+    await spotImage.destroy();
+
+    // Send a success response to the client
+    res.status(200).json("Successfully deleted");
+  });
+
 
 module.exports = router;

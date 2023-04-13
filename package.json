@@ -13,8 +13,10 @@
     "start": "npm start --prefix backend",
     "build": "npm run build --prefix backend"
   },
-
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
 }

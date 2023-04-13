@@ -30,12 +30,16 @@ const checkReviewImage = async (req,res,next) => {
 }
 
 //Delete a Review Image
-router.delete('/:imageId', requireAuth, checkReviewImage, checkReviewImageAuthorization, async (req,res,next) => {
-    const reviewImage = await ReviewImage.findByPk(req.params.imageId);
+router.delete('/:imageId', requireAuth, checkReviewImage, checkReviewImageAuthorization, async (req, res, next) => {
+    // Retrieve the review image by ID
+    const reviewImage = req.reviewImage;
 
-    await reviewImage.destroy()
+    // Delete the review image from the database
+    await reviewImage.destroy();
 
-    res.status(200).json("Successfully deleted")
-})
+    // Send a success message to the client
+    res.status(200).json("Successfully deleted");
+  });
+
 
 module.exports = router;
