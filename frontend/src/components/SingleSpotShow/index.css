@@ -57,7 +57,7 @@
     margin-top: 15px
 }
 
-.reserve-button {
+.reserve-button-container button {
     width: 80%;
     height: 30px;
     font-size: 10px;
@@ -67,6 +67,7 @@
     box-shadow: 2px 2px 0px black;
     color: white;
 }
+
 
 #hosted-by {
     font-size: 20px;

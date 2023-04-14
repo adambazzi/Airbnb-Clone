@@ -8,28 +8,33 @@
 #spot-tiles {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-gap: 5%;
+    grid-gap: 0;
     grid-auto-rows: minmax(100px, auto);
     width: 100%;
 }
 
 @media screen and (min-width: 1570px){
     #spot-tiles {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
     }
 }
 @media screen and (max-width: 1570px){
     #spot-tiles {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
+@media screen and (max-width: 1350px){
+    #spot-tiles {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 @media screen and (max-width: 1070px){
     #spot-tiles {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-@media screen and (max-width: 870px){
+@media screen and (max-width: 720px){
     #spot-tiles {
         grid-template-columns: repeat(1, 1fr);
     }

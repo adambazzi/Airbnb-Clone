@@ -9,6 +9,7 @@ import DisplayReviews from './DisplayReviews';
 import CreateReviewModal from '../CreateReviewModal';
 import OpenModalButton from '../OpenModalButton';
 import { clearSpot } from '../../store/Spots';
+import ReserveFormModal from '../ReserveFormModal';
 
 
 const SingleSpotShow = () => {
@@ -59,9 +60,17 @@ const SingleSpotShow = () => {
             </div>
           </div>
           <div className='reserve-button-container'>
-            <button className="reserve-button" type="button" onClick={() => alert('Feature Coming Soon...')()}>
+            {!user ?
+              <button className="reserve-button" type="button" onClick={() => alert('Please sign in to make a reservation!')}>
                 Reserve
-            </button>
+              </button>
+              :
+              <OpenModalButton
+                className="reserve-button"
+                buttonText="Reserve"
+                modalComponent={<ReserveFormModal spotId={spotId} />}
+              />
+            }
           </div>
 
         </div>
