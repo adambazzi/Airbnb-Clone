@@ -30,8 +30,8 @@ export const deleteBooking = bookingId => async () => {
     }
 }
 
-export const editBooking = (spotId, bookingId, data) => async () => {
-    const response = await csrfFetch(`/api/spots/${spotId}/bookings/${bookingId}`, {
+export const editBooking = (bookingId, data) => async () => {
+    const response = await csrfFetch(`/api/bookings/${bookingId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json'

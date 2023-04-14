@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { getBookings, createBooking, getCurrentUserBookings } from "../../store/Bookings";
+import { getBookings, createBooking, getCurrentUserBookings, editBooking } from "../../store/Bookings";
 
 // import './index.css'
 
@@ -15,13 +15,14 @@ function ReserveFormModal({ spotId }) {
   const [endDate, setEndDate] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [currentUserBookings, setCurrentUserBookings] = useState([]);
+  const [verifyCurrentBookingExists, setVerifyCurrentBookingExists] = useState(null)
 
   useEffect(() => {
     // Fetch all bookings for this spot
     dispatch(getBookings(spotId))
       .then((response) => {
         // Store the bookings in state
-        setBookings(response.bookings);
+        setBookings(response);
       })
       .catch((error) => {
         console.error(error);
@@ -31,25 +32,49 @@ function ReserveFormModal({ spotId }) {
     dispatch(getCurrentUserBookings())
       .then((response) => {
         // Store the current user's bookings in state
-        setCurrentUserBookings(response.bookings);
+        setCurrentUserBookings(response);
+
+        // If the user has a reservation, set the default values of the date pickers
+        if (response.length > 0) {
+          let test = response.find(el => el.spotId === Number(spotId))
+          if (test) setVerifyCurrentBookingExists(test)
+
+
+          if (test) {
+            setStartDate(new Date(test.startDate));
+            setEndDate(new Date(test.endDate));
+
+          }
+        }
       })
       .catch((error) => {
         console.error(error);
       });
   }, [dispatch, spotId]);
 
-  const user = useSelector(state => state.session.user);
+  useEffect(() => {
+    if (startDate && endDate) {
+      setDisableButton(false);
+    } else {
+      setDisableButton(true);
+    }
+  }, [startDate, endDate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
-      spotId,
       startDate,
       endDate
     };
 
-    dispatch(createBooking(payload));
+
+    if (verifyCurrentBookingExists) {
+      dispatch(editBooking(verifyCurrentBookingExists.id, payload))
+    } else {
+      dispatch(createBooking(payload));
+    }
+
     closeModal();
   };
 
@@ -80,6 +105,7 @@ function ReserveFormModal({ spotId }) {
 
   // Define an array to store dates that should be excluded (i.e., already booked)
   if (!bookings) return null
+  // Define an array to store dates that should be excluded (i.e., already booked)
   const excludeDates = bookings.map((booking) =>
     getDatesInRange(new Date(booking.startDate), new Date(booking.endDate))
   ).flat();
@@ -88,6 +114,7 @@ function ReserveFormModal({ spotId }) {
   const highlightDates = currentUserBookings.map((booking) =>
     getDatesInRange(new Date(booking.startDate), new Date(booking.endDate))
   ).flat();
+
 
   return (
     <>
