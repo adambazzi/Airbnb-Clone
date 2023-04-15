@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "sequelize": "sequelize",
-    "sequelize-cli": "sequelize-cli",
-    "start": "per-env",
+    "sequelize": "npx sequelize",
+    "start": "npm run start:$NODE_ENV",
     "start:development": "npm run sequelize db:seed:undo:all && npm run sequelize db:migrate:undo:all && npm run sequelize db:migrate && npm run sequelize db:seed:all && nodemon ./bin/wwww",
     "start:production": "node ./bin/www",
-    "build": "node psql-setup-script.js"
+    "build": "NODE_ENV=production npm run sequelize db:migrate && NODE_ENV=production npm run sequelize db:seed:all"
   },
   "keywords": [],
   "author": "",
