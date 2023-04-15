@@ -42,9 +42,9 @@ function App() {
           <Route exact path ="/spots/:spotId">
             <SingleSpotShow />
           </Route>
-          <Route exact path ="/map">
+          {/* <Route exact path ="/map">
             <Map />
-          </Route>
+          </Route> */}
           <Route>Page not found</Route>
         </Switch>
       )}
