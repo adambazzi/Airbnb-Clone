@@ -260,7 +260,7 @@ module.exports = {
     options.tableName = 'Spots';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      id: { [Op.in]: [1, 2, 3] }
+      id: { [Op.between]: [1, 20] }
     }, {});
   }
 };
