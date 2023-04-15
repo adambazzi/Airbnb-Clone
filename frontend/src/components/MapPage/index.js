@@ -108,7 +108,7 @@ function Map() {
     window.initMap = initMap;
 
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC9_U1rMVSxV3yOM2PaREZdZV6WuT8tZVo&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}=initMap`;
     script.async = true;
 
     // append the script to the document head
