@@ -1,0 +1,36 @@
+.reserve-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 1rem auto;
+    max-width: 400px;
+  }
+
+  .reserve-form label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .reserve-form .date-picker {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .reserve-form .submit-btn {
+    background-color: #0077cc;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .reserve-form .submit-btn:hover {
+    background-color: #005fa3;
+  }

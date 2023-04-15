@@ -1,8 +1,7 @@
 import { csrfFetch } from "./csrf";
 
 export const createBooking = data => async () => {
-    if (!data.addTo.length) return
-    const response = await csrfFetch(`/api/spots/:spotId/bookings`, {
+    const response = await csrfFetch(`/api/spots/${data.spotId}/bookings`, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

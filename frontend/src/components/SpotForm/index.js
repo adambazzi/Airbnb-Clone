@@ -165,7 +165,7 @@ const SpotForm = () => {
                         placeholder="City"
                     />
                     </label>
-                    <div className='comma'>,</div>
+                    <div className='comma'></div>
                     {/* State */}
                     <label id='state'>
                         <div>State <span className='validationErrors'>{validationErrors.state}</span></div>
@@ -190,7 +190,7 @@ const SpotForm = () => {
                         placeholder="Latitude"
                     />
                     </label>
-                    <div className='comma'>,</div>
+                    <div className='comma'></div>
                     {/* Longitude */}
                     <label id='Longitude'>
                         <div>Longitude <span className='validationErrors'>{validationErrors.lng}</span></div>
@@ -224,14 +224,14 @@ const SpotForm = () => {
                     <h2>Create a title for your spot</h2>
                     <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
                     <label>
-                        Name
-                    <input
-                        type="text"
-                        value={spotStateObject.name}
-                        name='name'
-                        onChange={handleChange}
-                        placeholder="Name of your spot"
-                    />
+                        <div>Name</div>
+                        <input
+                            type="text"
+                            value={spotStateObject.name}
+                            name='name'
+                            onChange={handleChange}
+                            placeholder="Name of your spot"
+                        />
                     </label>
                     <div className='validationErrors'>{validationErrors.name}</div>
                 </div>
@@ -240,7 +240,7 @@ const SpotForm = () => {
                     <h2>Set a base price for your spot</h2>
                     <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
                     <label>
-                        $
+
                     <input
                         type="text"
                         name='price'

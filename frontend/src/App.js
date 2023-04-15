@@ -9,6 +9,7 @@ import SingleSpotShow from "./components/SingleSpotShow";
 import SpotForm from "./components/SpotForm";
 import ManageSpots from "./components/ManageSpots";
 import EditSpotForm from "./components/EditSpotForm";
+import Map from "./components/MapPage";
 
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route exact path ="/spots/:spotId">
             <SingleSpotShow />
+          </Route>
+          <Route exact path ="/map">
+            <Map />
           </Route>
           <Route>Page not found</Route>
         </Switch>

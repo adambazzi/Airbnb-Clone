@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSingleSpot } from '../../store/Spots'
 import { getSpotReviews } from '../../store/Reviews';
@@ -10,31 +10,53 @@ import CreateReviewModal from '../CreateReviewModal';
 import OpenModalButton from '../OpenModalButton';
 import { clearSpot } from '../../store/Spots';
 import ReserveFormModal from '../ReserveFormModal';
-
+import { getCurrentUserBookings } from '../../store/Bookings';
 
 const SingleSpotShow = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
-
+  const [reserveButtonText, setReserveButtonText] = useState('Reserve');
+  const [mounted, setMounted] = useState(false);
 
   const spot = useSelector(state => state.spots.singleSpot);
   const reviews = useSelector(state => state.reviews.currentSpotReviews);
-  const user = useSelector(state => state.session.user)
+  const user = useSelector(state => state.session.user);
 
   useEffect(() => {
-    dispatch(getSingleSpot(spotId))
-    return () => dispatch(clearSpot())
-  }, [dispatch, spotId]);
-  useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch, spotId]);
+    setMounted(true);
 
-  if (!spot || !spot.Owner || !reviews ) return null;
+    if (spotId && mounted) {
+      dispatch(getSingleSpot(spotId));
+      dispatch(getSpotReviews(spotId));
+    }
 
-  const reviewsArray = Object.values(reviews)
-  let avgRating = (reviewsArray.reduce((acc, b) => acc + b.stars, 0)/reviewsArray.length).toFixed(1)
-  if (!(avgRating > 0)) avgRating = 'New'
-  const price = Number.parseFloat(spot.price).toFixed(2)
-  let userHasPosted
-  if (user) userHasPosted = reviewsArray.find(el => el.userId == user.id)
+    dispatch(getCurrentUserBookings())
+    .then((response) => {
+      if (response.length > 0 && spotId) {
+        let test = response.find(el => el.spotId === Number(spotId))
+        if (test) {
+          setReserveButtonText('Update Reservation')
+        }
+      }
+    })
+
+    return () => {
+      dispatch(clearSpot());
+      setMounted(false);
+    }
+  }, [dispatch, spotId, mounted]);
+
+
+  if (!spot || !spot.Owner || !reviews || !spot?.SpotImages?.length ) {
+    return <div>Loading...</div>;
+  }
+
+  const reviewsArray = Object.values(reviews);
+  let avgRating = (reviewsArray.reduce((acc, b) => acc + b.stars, 0)/reviewsArray.length).toFixed(1);
+  if (!(avgRating > 0)) avgRating = 'New';
+  const price = Number.parseFloat(spot.price).toFixed(2);
+  let userHasPosted;
+  if (user) userHasPosted = reviewsArray.find(el => el.userId == user.id);
 
   if (!Object.values(spot).length) {
     return null;
@@ -67,7 +89,7 @@ const SingleSpotShow = () => {
               :
               <OpenModalButton
                 className="reserve-button"
-                buttonText="Reserve"
+                buttonText={reserveButtonText}
                 modalComponent={<ReserveFormModal spotId={spotId} />}
               />
             }

@@ -1,4 +1,4 @@
-label {
+/* label {
     display: flex;
     flex-direction: column;
 }
@@ -105,4 +105,167 @@ p {
 
 .validationErrors {
     color: red
-}
+} */
+#spot-form-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 50px 0;
+    margin: 0;
+    background-color: #f8f8f8;
+  }
+
+  #spot-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  h2, h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    text-align: center;
+  }
+
+  p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #444;
+    border: none;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    transition: background-color 0.3s;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    background-color: #e0e0e0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .comma {
+    display: flex;
+    align-items: flex-end;
+    width: 5%;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  #spot-form-area-2,
+  #spot-form-area-3 {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+
+  #city {
+    width: 60%;
+  }
+
+  #state {
+    width: 40%;
+  }
+
+  #Latitude,
+  #Longitude {
+    width: 50%;
+  }
+
+  #description,
+  #title,
+  #price,
+  #photos {
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: solid 2px #e0e0e0;
+  }
+
+  textarea {
+    height: 120px;
+  }
+
+  #title {
+    text-align: center;
+  }
+
+  #price,
+  #photos {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #price label,
+  #photos label {
+    margin-bottom: 5px;
+  }
+
+  #photos input {
+    margin-bottom: 10px;
+  }
+
+  #submit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  #button {
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    color: #fff;
+    border-radius: 5px;
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  #button:hover {
+    background-color: #f44336;
+    transform: translateY(-2px);
+  }
+
+  #button:active {
+    background-color: #d32f2f;
+    box-shadow: none;
+    transform: translateY;
+  }
+  #title label {
+    text-align: start;
+  }

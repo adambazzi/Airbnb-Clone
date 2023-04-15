@@ -166,7 +166,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                         placeholder="City"
                     />
                     </label>
-                    <div class='comma'>,</div>
+                    <div class='comma'></div>
                     {/* State */}
                     <label id='state'>
                         <div>State <span className='validationErrors'>{validationErrors.state}</span></div>
@@ -193,7 +193,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                         placeholder="Latitude"
                     />
                     </label>
-                    <div class='comma'>,</div>
+                    <div class='comma'></div>
                     {/* Longitude */}
                     <label id='Longitude'>
                         <div>Longitude <span className='validationErrors'>{validationErrors.lng}</span></div>
@@ -245,7 +245,7 @@ if(!spotStateObject.name || !currentSpot.name) return null;
                     <h2>Set a base price for your spot</h2>
                     <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
                     <label>
-                        $
+
                     <input
                         name='price'
                         type="text"

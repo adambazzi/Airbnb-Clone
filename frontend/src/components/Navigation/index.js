@@ -14,14 +14,18 @@ function Navigation({ isLoaded }){
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <li className='logged-in'>
+        <a href="https://www.linkedin.com/in/adam-bazzi/" target="_blank" rel="noopener noreferrer" className='menuItem'>LinkedIn</a>
+        <a href="https://github.com/adambazzi" target="_blank" rel="noopener noreferrer" className='menuItem'>GitHub</a>
         <NavLink to='/spots/new'><button id='create-spot-button'>Create a Spot</button></NavLink>
         <ProfileButton user={sessionUser} />
       </li>
     );
   } else {
     sessionLinks = (
-      <li>
+      <li className='login-signup'>
+         <a href="https://www.linkedin.com/in/adam-bazzi/" target="_blank" rel="noopener noreferrer" className='menuItem'>LinkedIn</a>
+        <a href="https://github.com/adambazzi" target="_blank" rel="noopener noreferrer" className='menuItem'>GitHub</a>
         <OpenModalButton
           buttonText="Log In"
           modalComponent={<LoginFormModal />}

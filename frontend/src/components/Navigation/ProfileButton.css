@@ -1,7 +1,12 @@
 .profile-dropdown-container {
     position: absolute;
     background-color: white;
-    width: 150px;
+    width: 225px;
+    right: 220px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+
 }
 
 .dropdown-menu-display {
@@ -12,19 +17,76 @@
     justify-content: center;
     flex-direction: column;
     list-style: none;
+    width: 100%;
 }
 
 #profile-button {
     margin-right: 20px;
     width: 60px;
-    height: 27px;
+    height: 40px;
     border-radius: 8px;
+    border: solid 1px #e3e9ed;
+    background-color: white;
 }
 
 #profile-email, #profile-manage-spots {
-    border-bottom: black 2px solid;
+    border-bottom: #e3e9ed 1px solid;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 
+#profile-manage-spots a {
+    height: 40px;
+    width: 100%;
+    color: black;
+    text-decoration: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+}
+#profile-manage-spots a:hover {
+    background-color:#f5f8fa;
+}
 .profile-dropdown-container-logout-button {
     border-radius: 2px;
+}
+
+
+#log-out-button {
+    background-color: white;
+    border: none;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: #333333;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    cursor: pointer;
+}
+#log-out-button:hover{
+    background-color: rgb(245, 248, 250);
+}
+.fa-sharp {
+    margin-right: 5px;
+}
+#profile-username, #profile-email {
+    height: 25px;
+    margin-top: 5px;
+    padding: 5px 0;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+#log-out-button-container {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

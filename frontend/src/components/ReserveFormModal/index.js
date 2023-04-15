@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { getBookings, createBooking, getCurrentUserBookings, editBooking } from "../../store/Bookings";
 
-// import './index.css'
+import './index.css'
 
 function ReserveFormModal({ spotId }) {
   const dispatch = useDispatch();
@@ -65,7 +65,8 @@ function ReserveFormModal({ spotId }) {
 
     const payload = {
       startDate,
-      endDate
+      endDate,
+      spotId
     };
 
 
@@ -79,18 +80,23 @@ function ReserveFormModal({ spotId }) {
   };
 
   // Define a function to check if a given date range conflicts with an existing booking
-  const isBookingConflict = (start, end) => {
-    for (let booking of bookings) {
-      if (
-        (start >= new Date(booking.startDate) && start <= new Date(booking.endDate)) ||
-        (end >= new Date(booking.startDate) && end <= new Date(booking.endDate))
-      ) {
-        // Date range conflicts with an existing booking
-        return true;
-      }
-    }
-    return false;
-  };
+  // const isBookingConflict = (start, end) => {
+
+  //   if (!start) {
+  //     return false;
+  //   }
+
+  //   for (let booking of bookings) {
+  //     if (
+  //       (start >= new Date(booking.startDate) && start <= new Date(booking.endDate)) ||
+  //       (end >= new Date(booking.startDate) && end <= new Date(booking.endDate))
+  //     ) {
+  //       // Date range conflicts with an existing booking
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   // Define a function to generate an array of dates between two given dates
   const getDatesInRange = (start, end) => {
@@ -104,23 +110,27 @@ function ReserveFormModal({ spotId }) {
   };
 
   // Define an array to store dates that should be excluded (i.e., already booked)
-  if (!bookings) return null
-  // Define an array to store dates that should be excluded (i.e., already booked)
-  const excludeDates = bookings.map((booking) =>
-    getDatesInRange(new Date(booking.startDate), new Date(booking.endDate))
-  ).flat();
-
+  let excludeDates = [];
   // Define an array to store dates that should be highlighted (i.e., already booked by the current user)
-  const highlightDates = currentUserBookings.map((booking) =>
-    getDatesInRange(new Date(booking.startDate), new Date(booking.endDate))
-  ).flat();
+  let highlightDates = [];
+
+  if (bookings.length > 0) {
+    excludeDates = bookings.map((booking) =>
+      getDatesInRange(new Date(booking.startDate), new Date(booking.endDate))
+    ).flat();
+
+    highlightDates = currentUserBookings.map((booking) =>
+      getDatesInRange(new Date(booking.startDate), new Date(booking.endDate))
+    ).flat();
+  }
 
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label>Start Date:</label>
+      <form onSubmit={handleSubmit} className="reserve-form">
+        <label htmlFor="start-date" className="reserve-label">Start Date:</label>
         <DatePicker
+          id="start-date"
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           selectsStart
@@ -129,11 +139,13 @@ function ReserveFormModal({ spotId }) {
           minDate={new Date()}
           excludeDates={excludeDates}
           highlightDates={highlightDates}
-          filterDate={(date) => isBookingConflict(date, endDate)}
+          // filterDate={(date) => isBookingConflict(startDate, date)}
           dateFormat="dd/MM/yyyy"
+          className="reserve-datepicker"
         />
-        <label>End Date:</label>
+        <label htmlFor="end-date" className="reserve-label">End Date:</label>
         <DatePicker
+          id="end-date"
           selected={endDate}
           onChange={(date) => setEndDate(date)}
           selectsEnd
@@ -142,10 +154,11 @@ function ReserveFormModal({ spotId }) {
           minDate={startDate}
           excludeDates={excludeDates}
           highlightDates={highlightDates}
-          filterDate={(date) => isBookingConflict(startDate, date)}
+          // filterDate={(date) => isBookingConflict(startDate, date)}
           dateFormat="dd/MM/yyyy"
+          className="reserve-datepicker"
         />
-        <button type="submit" disabled={disableButton}>Reserve!</button>
+        <button type="submit" disabled={disableButton} className="reserve-submit">Reserve!</button>
       </form>
     </>
   );

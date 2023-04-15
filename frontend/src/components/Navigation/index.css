@@ -9,8 +9,9 @@
     align-items: center;
     list-style-type: none;
     height: 75px;
-    padding: 0 100px;
+    padding: 0 200px;
     margin: 0;
+    z-index: 1000;
 }
 
 .nav-bar a {
@@ -21,7 +22,6 @@
     top: 0px;
     background-color: white;
     border-bottom: rgb(199, 187, 187) 2px solid;
-    margin-bottom: 30px;
 }
 
 #breezebnb-title {
@@ -55,9 +55,24 @@
 }
 
 #create-spot-button {
-    color: teal;
+    color: #333;;
     background-color: white;
     border: none;
-    font-size: 15px;
+    font-size: 16px;
     margin-right: 20px;
+}
+.login-signup button, .login-signup a, .logged-in a {
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    height: 30px;
+    width: 70px;
+    border-radius: 5px;
+    margin-right: 20px;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+}
+.login-signup button:hover, .login-signup a:hover, .logged-in a:hover, #create-spot-button:hover {
+    color:#FF5A5F;
 }

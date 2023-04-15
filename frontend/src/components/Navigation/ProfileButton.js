@@ -4,7 +4,7 @@ import * as sessionActions from '../../store/session';
 import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import './index.css'
+import './ProfileButton.css'
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ function ProfileButton({ user }) {
           <li id='profile-username'>Hello, {user.username}</li>
           <li id='profile-email'>{user.email}</li>
           <li id='profile-manage-spots'><NavLink exact to='/spots/current'>Manage Spots</NavLink></li>
-          <li>
+          <li id='log-out-button-container'>
             <button onClick={logout} id='log-out-button'>Log Out</button>
           </li>
         </ul>

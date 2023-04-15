@@ -3,7 +3,7 @@
     justify-content: center;
     flex-direction: column;
     width: 80%;
-    margin: 0px 10%;
+    margin: 70px 10% 0 10%;
 }
 #current-spot-tiles {
     display: grid;

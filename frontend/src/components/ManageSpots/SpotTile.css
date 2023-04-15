@@ -7,8 +7,8 @@
     height: 330px;
     margin-bottom: 10px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    /* border-radius: 8px; */
     overflow: hidden;
     text-align: center;
     text-decoration: none;
@@ -43,6 +43,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     object-fit: cover;
+    border-radius: 16px
 }
 
 .manage-spot-tile-preview-information {
@@ -122,3 +123,5 @@
     display: flex;
     flex-direction: row;
 }
+
+
