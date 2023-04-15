@@ -5,14 +5,9 @@ import './DisplayReviews.css'
 import OpenModalButton from "../OpenModalButton";
 import DeleteReviewModal from "../DeleteReviewModal";
 
-const DisplayReviews = ({ spotId }) => {
-    const dispatch = useDispatch();
-
-    const reviews = useSelector(state => state.reviews.currentSpotReviews);
+const DisplayReviews = ({ spotId, reviews }) => {
 
     const user = useSelector(state => state.session.user);
-
-    useEffect(() => {dispatch(getSpotReviews(spotId))}, [dispatch, spotId]);
 
     if (!Object.values(reviews).length || !user) return <li>Be the first to post a review!</li>;
 

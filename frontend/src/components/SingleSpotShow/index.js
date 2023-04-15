@@ -106,7 +106,7 @@ const SingleSpotShow = () => {
         />) : ''}
         </div>
         <ul className='single-spot-display-reviews-list'>
-          <DisplayReviews spotId={ spotId }/>
+          <DisplayReviews spotId={ spotId } reviews={reviews} />
         </ul>
       </div>
     </section>
