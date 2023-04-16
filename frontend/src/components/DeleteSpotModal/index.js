@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { deleteSpot, getCurrentUserSpots } from "../../store/Spots";
 import { useModal } from "../../context/Modal";
 import './index.css'
-import { useEffect } from "react";
 
 function DeleteSpotModal({ spotId }) {
   const dispatch = useDispatch();

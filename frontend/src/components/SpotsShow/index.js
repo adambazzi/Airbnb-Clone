@@ -21,7 +21,7 @@ const Spots = () => {
   return (
     <section id='spot-gallery'>
       <div id='spot-tiles'>
-        {Object.values(spots).map(spot => <SpotTile spot={spot} />)}
+        {Object.values(spots).map(spot => <SpotTile spot={spot} key={spot.id} />)}
       </div>
       <NavLink to="/map" className='showMap'>
         <div>Show Map</div>
