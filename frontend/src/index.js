@@ -33,4 +33,16 @@ function Root() {
 }
 
 const rootElement = document.getElementById('root');
-ReactDOM.createRoot(rootElement).render(<React.StrictMode><Root /></React.StrictMode>);
+ReactDOM.render(
+  <React.StrictMode>
+    <ModalProvider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+          <Modal />
+        </BrowserRouter>
+      </Provider>
+    </ModalProvider>
+  </React.StrictMode>,
+  rootElement
+);

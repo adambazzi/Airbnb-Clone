@@ -1,3 +1,6 @@
+process.on('unhandledRejection', (reason, p) => {
+  console.error('Unhandled Rejection at:', p, 'reason:', reason);
+});
 const express = require('express');
 require('express-async-errors');
 const morgan = require('morgan');
@@ -72,6 +75,11 @@ app.use((err, _req, res, _next) => {
       errors: err.errors,
     //   stack: isProduction ? null : err.stack
     });
+});
+
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
 
 module.exports = app;
