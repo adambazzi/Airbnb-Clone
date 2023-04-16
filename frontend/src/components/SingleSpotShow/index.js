@@ -16,20 +16,13 @@ const SingleSpotShow = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   const [reserveButtonText, setReserveButtonText] = useState('Reserve');
-  const [mounted, setMounted] = useState(false);
-
   const spot = useSelector(state => state.spots.singleSpot);
   const reviews = useSelector(state => state.reviews.currentSpotReviews);
   const user = useSelector(state => state.session.user);
 
   useEffect(() => {
-    setMounted(true);
-
-    if (spotId && mounted) {
-      dispatch(getSingleSpot(spotId));
-      dispatch(getSpotReviews(spotId));
-    }
-
+    dispatch(getSingleSpot(spotId));
+    dispatch(getSpotReviews(spotId));
     dispatch(getCurrentUserBookings())
     .then((response) => {
       if (response.length > 0 && spotId) {
@@ -42,9 +35,8 @@ const SingleSpotShow = () => {
 
     return () => {
       dispatch(clearSpot());
-      setMounted(false);
     }
-  }, [dispatch, spotId, mounted]);
+  }, [dispatch, spotId]);
 
 
   if (!spot || !spot.Owner || !reviews || !spot?.SpotImages?.length ) {
