@@ -75,8 +75,8 @@ const SingleSpotShow = () => {
           </div>
           <div className='reserve-button-container'>
             {!user ?
-              <button className="reserve-button" type="button" onClick={() => alert('Please sign in to make a reservation!')}>
-                Reserve
+              <button className="reserve-button" type="button" onClick={() => setReserveButtonText("Please Log In to make a reservation!")}>
+                {reserveButtonText}
               </button>
               :
               <OpenModalButton

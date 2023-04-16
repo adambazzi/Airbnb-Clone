@@ -12,7 +12,6 @@
     flex-direction: column;
     justify-content: center;
     width: 90%;
-    font-family: Helvetica, sans-serif;
     padding: 0px;
     margin: 0px;
     align-items: center;
@@ -22,7 +21,7 @@
     padding: 0px 0px 20px 0px;
     margin: 0px;
     font-size: 30px;
-    font-weight: lighter;
+    font-weight: 400;
 }
 
 .log-in-form ul {
@@ -40,7 +39,12 @@
 .log-in-form label {
     margin-bottom: 10px;
     font-size: 13px;
-    width: 100%;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+}
+.log-in-form input {
+    width: 95%;
 }
 
 .log-in-form button {
@@ -53,6 +57,7 @@
     background-color: white;
     text-decoration: underline;
     color: teal;
+    cursor: pointer;
 }
 
 #log-in-button {
