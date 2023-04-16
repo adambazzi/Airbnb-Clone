@@ -1,6 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getSpotReviews } from '../../store/Reviews';
+import { useSelector } from "react-redux";
 import './DisplayReviews.css'
 import OpenModalButton from "../OpenModalButton";
 import DeleteReviewModal from "../DeleteReviewModal";

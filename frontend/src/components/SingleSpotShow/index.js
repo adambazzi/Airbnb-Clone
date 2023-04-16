@@ -102,7 +102,7 @@ const SingleSpotShow = () => {
         <div className='review-button-container'>
         {!userHasPosted && user ? (<OpenModalButton
           buttonText="Post Your Review"
-          modalComponent={<CreateReviewModal />}
+          modalComponent={<CreateReviewModal reviews={reviews} />}
         />) : ''}
         </div>
         <ul className='single-spot-display-reviews-list'>

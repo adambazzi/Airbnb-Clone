@@ -9,7 +9,8 @@
     "start": "per-env",
     "start:development": "npm run sequelize db:seed:undo:all && npm run sequelize db:migrate:undo:all && npm run sequelize db:migrate && npm run sequelize db:seed:all && nodemon ./bin/www",
     "start:production": "node ./bin/www",
-    "build": "node psql-setup-script.js"
+    "build": "node psql-setup-script.js",
+    "check-dependencies": "dependency-cruiser --exit-code 1 --progress src"
   },
   "keywords": [],
   "author": "",
