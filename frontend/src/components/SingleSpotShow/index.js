@@ -48,7 +48,7 @@ const SingleSpotShow = () => {
 
   const reviewsArray = Object.values(reviews);
   let avgRating = (reviewsArray.reduce((acc, b) => acc + b.stars, 0)/reviewsArray.length).toFixed(1);
-  if (!avgRating) avgRating = 'New';
+  if (typeof avgRating === 'string') avgRating = 'New';
   const price = Number.parseFloat(spot.price).toFixed(2);
   let userHasPosted;
   if (user) userHasPosted = reviewsArray.find(el => el.userId == user.id);
@@ -60,8 +60,8 @@ const SingleSpotShow = () => {
 
   return (
     <section id='single-spot'>
-      <div>{spot.name}</div>
-      <div>{spot.city}, {spot.state}, {spot.country}</div>
+      <h1>{spot.name}</h1>
+      <h4>{spot.city}, {spot.state}, {spot.country}</h4>
       <SpotImages images={spot.SpotImages} />
       <div id='description-container'>
         <div id="name-description-container">
