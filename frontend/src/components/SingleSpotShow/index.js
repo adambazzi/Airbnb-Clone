@@ -21,21 +21,24 @@ const SingleSpotShow = () => {
   const user = useSelector(state => state.session.user);
 
   useEffect(() => {
-    dispatch(getSingleSpot(spotId));
-    dispatch(getSpotReviews(spotId));
-    dispatch(getCurrentUserBookings())
-    .then((response) => {
+    const fetchData = async () => {
+      await dispatch(getSingleSpot(spotId));
+      await dispatch(getSpotReviews(spotId));
+      const response = await dispatch(getCurrentUserBookings());
+
       if (response.length > 0 && spotId) {
-        let test = response.find(el => el.spotId === Number(spotId))
+        let test = response.find(el => el.spotId === Number(spotId));
         if (test) {
-          setReserveButtonText('Update Reservation')
+          setReserveButtonText('Update Reservation');
         }
       }
-    })
+    };
+
+    fetchData();
 
     return () => {
       dispatch(clearSpot());
-    }
+    };
   }, [dispatch, spotId]);
 
 
@@ -45,7 +48,7 @@ const SingleSpotShow = () => {
 
   const reviewsArray = Object.values(reviews);
   let avgRating = (reviewsArray.reduce((acc, b) => acc + b.stars, 0)/reviewsArray.length).toFixed(1);
-  if (!(avgRating > 0)) avgRating = 'New';
+  if (!avgRating) avgRating = 'New';
   const price = Number.parseFloat(spot.price).toFixed(2);
   let userHasPosted;
   if (user) userHasPosted = reviewsArray.find(el => el.userId == user.id);
@@ -53,6 +56,7 @@ const SingleSpotShow = () => {
   if (!Object.values(spot).length) {
     return null;
   }
+
 
   return (
     <section id='single-spot'>
