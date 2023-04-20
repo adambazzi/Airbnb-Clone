@@ -49,12 +49,15 @@ const SpotForm = () => {
     }
 
 
+    const handleFileChange = e => {
+        const changeSpot = {...spotStateObject, [e.target.name]: e.target.files[0]}
+        setSpotStateObject(changeSpot)
+    }
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
 
         // Append spot properties individually
         const spot = {
@@ -70,16 +73,12 @@ const SpotForm = () => {
             price: spotStateObject.price
         }
 
-        const images = [
-            { preview: true, file: spotStateObject.previewImage },
-            { preview: false, file: spotStateObject.image1 },
-            { preview: false, file: spotStateObject.image2 },
-            { preview: false, file: spotStateObject.image3 },
-            { preview: false, file: spotStateObject.image4 },
-          ];
-
-    // Append the entire images array as a JSON string
-    formData.append('images', JSON.stringify(images));
+        const formData = new FormData();
+        if (spotStateObject.previewImage) formData.append(`images`, spotStateObject.previewImage);
+        if (spotStateObject.image1) formData.append(`images`, spotStateObject.image1);
+        if (spotStateObject.image2) formData.append(`images`, spotStateObject.image2);
+        if (spotStateObject.image3) formData.append(`images`, spotStateObject.image3);
+        if (spotStateObject.image4) formData.append(`images`, spotStateObject.image4);
 
         //checks form
         const errors = {}
@@ -92,7 +91,7 @@ const SpotForm = () => {
         if (spot.description.length < 30) errors.description = 'Description needs a minimum of 30 characters';
         if (!spot.name.length) errors.name = 'Name is required';
         if (!spot.price.toString().length) errors.price = 'Price is required';
-        if (!JSON.parse(formData.get('images'))[0].file) errors.previewImage = 'Preview image is required';
+        if (!spotStateObject.previewImage) errors.previewImage = 'Preview image is required';
 
 
 
@@ -117,7 +116,7 @@ const SpotForm = () => {
             <h2>Create a new Spot</h2>
             <h3>Where's your place located?</h3>
             <p>Guests will only get your exact address once they booked a reservation</p>
-            <form className='spot-form' onSubmit={handleSubmit}>
+            <form className='spot-form' onSubmit={handleSubmit} >
                 <div id='spot-form-area-1'>
                     {/* country */}
                     <label>
@@ -246,30 +245,34 @@ const SpotForm = () => {
                     <p>Submit a link to at least one photo to publish your spot.</p>
                     <input
                         type="file"
+                        accept="image/*"
                         name='previewImage'
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                     />
                     {validationErrors.previewImage ? (<div className='validationErrors'>{validationErrors.previewImage}</div>) : ''}
                     <input
                         type="file"
+                        accept="image/*"
                         name='image1'
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                     />
-                    {validationErrors.imageType ? (<div className='validationErrors'>{validationErrors.imageType}</div>) : ''}
                     <input
                         type="file"
+                        accept="image/*"
                         name='image2'
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                     />
                     <input
                         type="file"
+                        accept="image/*"
                         name='image3'
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                     />
                     <input
                         type="file"
+                        accept="image/*"
                         name='image4'
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                     />
                 </div>
 

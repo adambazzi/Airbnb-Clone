@@ -72,22 +72,11 @@ export const createSpot = (spot, formData) => async dispatch => {
     spotPayload = await spotResponse.json();
   }
 
-  // Retrieve images array from formData
-  const images = JSON.parse(formData.get("images"));
 
-  // Use a new FormData object to send the image data
-  const imagesFormData = new FormData();
-  images
-  .filter((image) => image.file)
-  .forEach((image, index) => {
-    imagesFormData.append(`image${index + 1}`, image.file);
-    imagesFormData.append(`preview${index + 1}`, image.preview);
-  });
-
-  if (imagesFormData.getAll("image1").length) {
+  if (formData.getAll("images").length) {
     const imagesResponse = await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
       method: "post",
-      body: imagesFormData, // Use the FormData object as the request body
+      body: formData, // Use the FormData object as the request body
     });
 
     if (!imagesResponse.ok) {

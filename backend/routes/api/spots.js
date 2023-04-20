@@ -1,35 +1,13 @@
+require('dotenv').config();
 const express = require('express')
 const router = express.Router();
 const Sequelize = require("sequelize")
 const { requireAuth } = require('../../utils/auth');
 const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
+
+
 const multer = require('multer');
-const multerS3 = require('multer-s3');
-const AWS = require('aws-sdk');
-const { multiplePublicFileUpload } = require('../../aws');
-
-require('dotenv').config();
-
-
-// Set up AWS S3 credentials
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
-  });
-
-// Set up multer middleware to handle file uploads to AWS S3
-const upload = multer({
-    storage: multerS3({
-        s3: s3,
-        bucket: process.env.AWS_S3_BUCKET_NAME,
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        acl: 'public-read',
-        key: function (req, file, cb) {
-        cb(null, Date.now().toString() + '-' + file.originalname);
-        }
-    })
-});
+const upload = multer({ dest: 'uploads/' })
 
 
 
@@ -115,6 +93,13 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) 
     res.status(200).json(verifyBooking);
   });
 
+  const handleError = (err, req, res, next) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(500).json({ error: 'Multer error: ' + err.message });
+    }
+    next();
+  };
 
 // Create a Review for a Spot based on the Spot's id
 router.post('/:spotId/reviews', requireAuth, checkSpot, async (req, res, next) => {
@@ -149,38 +134,20 @@ router.post('/:spotId/reviews', requireAuth, checkSpot, async (req, res, next) =
 
 
 // Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', requireAuth, checkSpot, checkSpotAuthorization, upload.array("image"), async (req, res, next) => {
-    const { preview } = req.body;
+router.post('/:spotId/images', requireAuth, checkSpot, checkSpotAuthorization, upload.array("images"), async (req, res, next) => {
     const images = req.files;
+    console.log('************',images)
 
-    // Get all existing images for the specified spot
-    const spotImages = await SpotImage.findAll({
-      where: {
-        spotId: req.params.spotId
-      }
-    });
 
-    // If preview is true, set the preview attribute to false for all other images
-    if (preview === 'true') {
-      for (let image of spotImages) {
-        const imageJSON = image.toJSON();
-        if (imageJSON.preview === true) {
-          image.set({ preview: false });
-          await image.save();
-        }
-      }
-    }
+    // const { preview } = req.body;
+    // const images = req.files.image;
 
     // Save each image to the database
-    const imageUrls = await multiplePublicFileUpload(images);
-    for (let i = 0; i < imageUrls.length; i++) {
-        const previewKey = `preview${i + 1}`;
-        const preview = req.body[previewKey] === 'true';
-
+    for (let i = 0; i < images.length; i++) {
         const newImage = {
-            url: imageUrls[i], // AWS S3 URL of the image
-            preview, // Set preview based on the formData value
-            spotId: req.params.spotId
+            url: images[i].location || images[i].key, // AWS S3 URL of the image
+            preview: i === 0 ? true : false, // Set preview based on the fieldname
+            spotId: req.params.spotId,
         };
         await SpotImage.create(newImage);
     }
