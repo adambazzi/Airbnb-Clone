@@ -55,43 +55,51 @@ export const getSingleSpot = (spotId) => async dispatch => {
   }
 }
 
-export const createSpot = data => async dispatch => {
+
+
+export const createSpot = (spot, formData) => async dispatch => {
+  // Save the spot data in the database
   const spotResponse = await csrfFetch(`/api/spots`, {
-    method: 'post',
+    method: "post",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data.spot)
+    body: JSON.stringify(spot),
   });
 
-  let spotPayload
+  let spotPayload;
   if (spotResponse.ok) {
-    spotPayload = await spotResponse.json()
+    spotPayload = await spotResponse.json();
   }
-  for (let image of Object.values(data.images)) {
-    image.spotId = spotPayload.id
-    if (image.url !== '') {
-      await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(image)
-      })
+
+  // Retrieve images array from formData
+  const images = JSON.parse(formData.get("images"));
+
+  // Use a new FormData object to send the image data
+  const imagesFormData = new FormData();
+  images
+  .filter((image) => image.file)
+  .forEach((image, index) => {
+    imagesFormData.append(`image${index + 1}`, image.file);
+    imagesFormData.append(`preview${index + 1}`, image.preview);
+  });
+
+  if (imagesFormData.getAll("image1").length) {
+    const imagesResponse = await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
+      method: "post",
+      body: imagesFormData, // Use the FormData object as the request body
+    });
+
+    if (!imagesResponse.ok) {
+      throw new Error("Failed to save images.");
     }
   }
-  const newSpotResponse = await csrfFetch(`/api/spots/${spotPayload.id}`);
 
-  if (newSpotResponse.ok) {
-    const payload = await newSpotResponse.json();
-    if (!payload.SpotImages) {
-      dispatch(addSpot(payload));
-    }
-    return payload.id
-  }
-
-
+  return spotPayload.id;
 };
+
+
+
 
 export const getCurrentUserSpots = () => async dispatch => {
   const response = await csrfFetch('/api/spots/current');
