@@ -16,6 +16,7 @@ const SingleSpotShow = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   const [reserveButtonText, setReserveButtonText] = useState('Reserve');
+  const [loading, setLoading] = useState(true);
   const spot = useSelector(state => state.spots.singleSpot);
   const reviews = useSelector(state => state.reviews.currentSpotReviews);
   const user = useSelector(state => state.session.user);
@@ -27,11 +28,13 @@ const SingleSpotShow = () => {
       const response = await dispatch(getCurrentUserBookings());
 
       if (response.length > 0 && spotId) {
-        let test = response.find(el => el.spotId === Number(spotId));
+        let test = response.find((el) => el.spotId === Number(spotId));
         if (test) {
           setReserveButtonText('Update Reservation');
         }
       }
+
+      setLoading(false);
     };
 
     fetchData();
