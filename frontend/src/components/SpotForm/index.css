@@ -161,3 +161,7 @@
     box-shadow: none;
     transform: translateY;
   }
+
+  .validationErrors {
+    color: red;
+  }

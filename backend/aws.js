@@ -1,3 +1,4 @@
+require("dotenv").config();
 const AWS = require("aws-sdk");
 // name of your bucket here
 const NAME_OF_BUCKET = process.env.AWS_BUCKET_NAME;
@@ -9,7 +10,11 @@ const multer = require("multer");
 //  AWS_SECRET_ACCESS_KEY
 //  and aws will automatically use those environment variables
 
-const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+const s3 = new AWS.S3({
+    apiVersion: "2006-03-01",
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  });
 
 // --------------------------- Public UPLOAD ------------------------
 
@@ -22,7 +27,7 @@ const singlePublicFileUpload = async (file) => {
     Bucket: NAME_OF_BUCKET,
     Key,
     Body: buffer,
-    ACL: "public-read",
+    // ACL: "public-read",
   };
   const result = await s3.upload(uploadParams).promise();
 

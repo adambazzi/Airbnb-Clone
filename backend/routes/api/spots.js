@@ -6,10 +6,10 @@ const { requireAuth } = require('../../utils/auth');
 const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' })
-
-
+const {
+    multipleMulterUpload,
+    multiplePublicFileUpload,
+  } = require("../../aws");
 
 //Verify authorization
 const checkSpotAuthorization = async (req,res,next) => {
@@ -93,13 +93,6 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) 
     res.status(200).json(verifyBooking);
   });
 
-  const handleError = (err, req, res, next) => {
-    if (err) {
-      console.error('Multer error:', err);
-      return res.status(500).json({ error: 'Multer error: ' + err.message });
-    }
-    next();
-  };
 
 // Create a Review for a Spot based on the Spot's id
 router.post('/:spotId/reviews', requireAuth, checkSpot, async (req, res, next) => {
@@ -134,27 +127,21 @@ router.post('/:spotId/reviews', requireAuth, checkSpot, async (req, res, next) =
 
 
 // Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', requireAuth, checkSpot, checkSpotAuthorization, upload.array("images"), async (req, res, next) => {
-    const images = req.files;
-    console.log('************',images)
-
-
-    // const { preview } = req.body;
-    // const images = req.files.image;
+router.post('/:spotId/images', requireAuth, checkSpot, checkSpotAuthorization, multipleMulterUpload("images"), async (req, res, next) => {
+    const images = await multiplePublicFileUpload(req.files);
 
     // Save each image to the database
     for (let i = 0; i < images.length; i++) {
         const newImage = {
-            url: images[i].location || images[i].key, // AWS S3 URL of the image
+            url: images[i], // AWS S3 URL of the image
             preview: i === 0 ? true : false, // Set preview based on the fieldname
             spotId: req.params.spotId,
         };
         await SpotImage.create(newImage);
     }
 
-
-    res.status(200).json({ message: 'Images saved successfully.' });
-  });
+    res.sendStatus(200); // Send a 200 status code without any JSON response body
+});
 
 
 

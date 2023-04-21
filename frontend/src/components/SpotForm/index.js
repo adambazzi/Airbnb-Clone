@@ -73,6 +73,7 @@ const SpotForm = () => {
             price: spotStateObject.price
         }
 
+
         const formData = new FormData();
         if (spotStateObject.previewImage) formData.append(`images`, spotStateObject.previewImage);
         if (spotStateObject.image1) formData.append(`images`, spotStateObject.image1);

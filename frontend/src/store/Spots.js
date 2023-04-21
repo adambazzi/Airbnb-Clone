@@ -73,20 +73,21 @@ export const createSpot = (spot, formData) => async dispatch => {
   }
 
 
-  if (formData.getAll("images").length) {
     const imagesResponse = await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
       method: "post",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       body: formData, // Use the FormData object as the request body
     });
 
     if (!imagesResponse.ok) {
       throw new Error("Failed to save images.");
     }
-  }
+
 
   return spotPayload.id;
-};
-
+}
 
 
 
