@@ -1,8 +1,15 @@
+require('dotenv').config();
 const express = require('express')
 const router = express.Router();
 const Sequelize = require("sequelize")
 const { requireAuth } = require('../../utils/auth');
 const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
+
+
+const {
+    multipleMulterUpload,
+    multiplePublicFileUpload,
+  } = require("../../aws");
 
 //Verify authorization
 const checkSpotAuthorization = async (req,res,next) => {
@@ -119,48 +126,23 @@ router.post('/:spotId/reviews', requireAuth, checkSpot, async (req, res, next) =
   });
 
 
-//Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', requireAuth, checkSpot, checkSpotAuthorization, async (req,res,next) => {
-    const { url, preview } = req.body;
+// Add an Image to a Spot based on the Spot's id
+router.post('/:spotId/images', requireAuth, checkSpot, checkSpotAuthorization, multipleMulterUpload("images"), async (req, res, next) => {
+    const images = await multiplePublicFileUpload(req.files);
 
-    // Get all existing images for the specified spot
-    const spotImages = await SpotImage.findAll({
-        where: {
-            spotId: req.params.spotId
-        }
-    });
-
-    // If preview is true, set the preview attribute to false for all other images
-    if (preview === true) {
-        for (let image of spotImages) {
-            const imageJSON = image.toJSON();
-            if (imageJSON.preview === true) {
-                image.set({ preview: false });
-                await image.save();
-            }
-        }
+    // Save each image to the database
+    for (let i = 0; i < images.length; i++) {
+        const newImage = {
+            url: images[i], // AWS S3 URL of the image
+            preview: i === 0 ? true : false, // Set preview based on the fieldname
+            spotId: req.params.spotId,
+        };
+        await SpotImage.create(newImage);
     }
 
-    // Create a new image and save it to the database
-    const newImage = {
-        url: url,
-        preview: preview,
-        spotId: req.params.spotId
-    };
-
-    await SpotImage.create(newImage);
-
-    // Retrieve the newly created image and send it as the response body
-    const verifyImage = await SpotImage.findOne({
-        where: {
-            spotId: req.params.spotId,
-            url: url
-        },
-        attributes: ["id", "url", "preview"]
-    });
-
-    res.status(200).json(verifyImage);
+    res.sendStatus(200); // Send a 200 status code without any JSON response body
 });
+
 
 
 //Create a Spot

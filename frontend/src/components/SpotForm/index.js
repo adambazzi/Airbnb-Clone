@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { createSpot } from '../../store/Spots';
+import { v4 as uuidv4 } from 'uuid';
+import AWS from 'aws-sdk';
 import './index.css'
 
 const SpotForm = () => {
@@ -44,71 +46,58 @@ const SpotForm = () => {
     const handleChange = e => {
         const changeSpot = {...spotStateObject, [e.target.name]: e.target.value}
         setSpotStateObject(changeSpot)
-      }
+    }
 
+
+    const handleFileChange = e => {
+        const changeSpot = {...spotStateObject, [e.target.name]: e.target.files[0]}
+        setSpotStateObject(changeSpot)
+    }
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const payload = {
-            spot: {
-                ownerId: user.id,
-                address: spotStateObject.address,
-                city: spotStateObject.city,
-                state: spotStateObject.state,
-                country: spotStateObject.country,
-                lat: spotStateObject.lat,
-                lng: spotStateObject.lng,
-                name: spotStateObject.name,
-                description: spotStateObject.description,
-                price: spotStateObject.price,
-            },
-            images: {
-                previewImage: {
-                    url: spotStateObject.previewImage,
-                    preview: true
-                },
-                image1: {
-                    url: spotStateObject.image1,
-                    preview: false
-                },
-                image2: {
-                    url: spotStateObject.image2,
-                    preview: false
-                },
-                image3: {
-                    url: spotStateObject.image3,
-                    preview: false
-                },
-                image4: {
-                    url: spotStateObject.image4,
-                    preview: false
-                }
-            }
-        };
 
+        // Append spot properties individually
+        const spot = {
+            ownerId: user.id,
+            country: spotStateObject.country,
+            address: spotStateObject.address,
+            city: spotStateObject.city,
+            state: spotStateObject.state,
+            lat: spotStateObject.lat,
+            lng: spotStateObject.lng,
+            description: spotStateObject.description,
+            name: spotStateObject.name,
+            price: spotStateObject.price
+        }
+
+
+        const formData = new FormData();
+        if (spotStateObject.previewImage) formData.append(`images`, spotStateObject.previewImage);
+        if (spotStateObject.image1) formData.append(`images`, spotStateObject.image1);
+        if (spotStateObject.image2) formData.append(`images`, spotStateObject.image2);
+        if (spotStateObject.image3) formData.append(`images`, spotStateObject.image3);
+        if (spotStateObject.image4) formData.append(`images`, spotStateObject.image4);
 
         //checks form
         const errors = {}
-        if (!payload.spot.country.length) errors.country = 'Country is required';
-        if (!payload.spot.state.length) errors.state = 'State is required';
-        if (!payload.spot.city.length) errors.city = 'City is required';
-        if (!payload.spot.address.length) errors.address = 'Address is required';
-        if (!payload.spot.lat.toString().length) errors.lat = 'Latitude is required';
-        if (!payload.spot.lng.toString().length) errors.lng = 'Longitude is required';
-        if (payload.spot.description.length < 30) errors.description = 'Description needs a minimum of 30 characters';
-        if (!payload.spot.name.length) errors.name = 'Name is required';
-        if (!payload.spot.price.toString().length) errors.price = 'Price is required';
-        if (!payload.images.previewImage.url.length) errors.previewImage = 'Preview image is required';
-        if (!payload.images.previewImage.url.endsWith('.png') && !payload.images.previewImage.url.endsWith('.jpg') && !payload.images.previewImage.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
-        if (payload.images.image1.url.length && !payload.images.image1.url.endsWith('.png') && !payload.images.image1.url.endsWith('.jpg') && payload.images.image1.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
-        if (payload.images.image2.url.length && !payload.images.image2.url.endsWith('.png') && !payload.images.image2.url.endsWith('.jpg') && payload.images.image2.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
-        if (payload.images.image3.url.length && !payload.images.image3.url.endsWith('.png') && !payload.images.image3.url.endsWith('.jpg') && payload.images.image3.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
-        if (payload.images.image4.url.length && !payload.images.image4.url.endsWith('.png') && !payload.images.image4.url.endsWith('.jpg') && payload.images.image4.url.endsWith('.jpeg')) errors.imageType = 'Image URL must end in .png, .jpg, or .jpeg';
+        if (!spot.country.length) errors.country = 'Country is required';
+        if (!spot.state.length) errors.state = 'State is required';
+        if (!spot.city.length) errors.city = 'City is required';
+        if (!spot.address.length) errors.address = 'Address is required';
+        if (!spot.lat.toString().length) errors.lat = 'Latitude is required';
+        if (!spot.lng.toString().length) errors.lng = 'Longitude is required';
+        if (spot.description.length < 30) errors.description = 'Description needs a minimum of 30 characters';
+        if (!spot.name.length) errors.name = 'Name is required';
+        if (!spot.price.toString().length) errors.price = 'Price is required';
+        if (!spotStateObject.previewImage) errors.previewImage = 'Preview image is required';
+
+
 
         if (!Object.values(errors).length) {
-            let createdSpotId = await dispatch(createSpot(payload));
+            let createdSpotId = await dispatch(createSpot(spot, formData));
 
             if (createdSpotId) {
                 history.push(`/spots/${createdSpotId}`);
@@ -128,7 +117,7 @@ const SpotForm = () => {
             <h2>Create a new Spot</h2>
             <h3>Where's your place located?</h3>
             <p>Guests will only get your exact address once they booked a reservation</p>
-            <form className='spot-form' onSubmit={handleSubmit}>
+            <form className='spot-form' onSubmit={handleSubmit} >
                 <div id='spot-form-area-1'>
                     {/* country */}
                     <label>
@@ -256,43 +245,38 @@ const SpotForm = () => {
                     <h2>Liven up your spot with photos</h2>
                     <p>Submit a link to at least one photo to publish your spot.</p>
                     <input
-                        type="text"
-                        value={spotStateObject.previewImage}
+                        type="file"
+                        accept="image/*"
                         name='previewImage'
-                        onChange={handleChange}
-                        placeholder='Preview Image URL'
+                        onChange={handleFileChange}
                     />
                     {validationErrors.previewImage ? (<div className='validationErrors'>{validationErrors.previewImage}</div>) : ''}
                     <input
-                        type="text"
+                        type="file"
+                        accept="image/*"
                         name='image1'
-                        value={spotStateObject.image1}
-                        onChange={handleChange}
-                        placeholder='Image URL'
+                        onChange={handleFileChange}
                     />
-                     {validationErrors.imageType ? (<div className='validationErrors'>{validationErrors.imageType}</div>) : ''}
                     <input
-                        type="text"
+                        type="file"
+                        accept="image/*"
                         name='image2'
-                        value={spotStateObject.image2}
-                        onChange={handleChange}
-                        placeholder='Image URL'
+                        onChange={handleFileChange}
                     />
                     <input
-                        type="text"
+                        type="file"
+                        accept="image/*"
                         name='image3'
-                        value={spotStateObject.image3}
-                        onChange={handleChange}
-                        placeholder='Image URL'
+                        onChange={handleFileChange}
                     />
                     <input
-                        type="text"
+                        type="file"
+                        accept="image/*"
                         name='image4'
-                        value={spotStateObject.image4}
-                        onChange={handleChange}
-                        placeholder='Image URL'
+                        onChange={handleFileChange}
                     />
                 </div>
+
                 <div id='submit-container'>
                     <button type="submit" id='button'>Create Spot</button>
                 </div>

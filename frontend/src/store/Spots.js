@@ -55,43 +55,41 @@ export const getSingleSpot = (spotId) => async dispatch => {
   }
 }
 
-export const createSpot = data => async dispatch => {
+
+
+export const createSpot = (spot, formData) => async dispatch => {
+  // Save the spot data in the database
   const spotResponse = await csrfFetch(`/api/spots`, {
-    method: 'post',
+    method: "post",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data.spot)
+    body: JSON.stringify(spot),
   });
 
-  let spotPayload
+  let spotPayload;
   if (spotResponse.ok) {
-    spotPayload = await spotResponse.json()
+    spotPayload = await spotResponse.json();
   }
-  for (let image of Object.values(data.images)) {
-    image.spotId = spotPayload.id
-    if (image.url !== '') {
-      await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(image)
-      })
+
+
+    const imagesResponse = await csrfFetch(`/api/spots/${spotPayload.id}/images`, {
+      method: "post",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData, // Use the FormData object as the request body
+    });
+
+    if (!imagesResponse.ok) {
+      throw new Error("Failed to save images.");
     }
-  }
-  const newSpotResponse = await csrfFetch(`/api/spots/${spotPayload.id}`);
-
-  if (newSpotResponse.ok) {
-    const payload = await newSpotResponse.json();
-    if (!payload.SpotImages) {
-      dispatch(addSpot(payload));
-    }
-    return payload.id
-  }
 
 
-};
+  return spotPayload.id;
+}
+
+
 
 export const getCurrentUserSpots = () => async dispatch => {
   const response = await csrfFetch('/api/spots/current');
